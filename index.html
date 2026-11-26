@@ -28,7 +28,6 @@
       }
     };
   </script>
-  #modal-cloud {display:none important!;}
   <style>
     body { font-family: 'Inter', system-ui, sans-serif; background-color: #f8fafc; color: #0f172a; }
     .tab-btn.active { background-color: #eef2ff; color: #4338ca; font-weight: 600; }
@@ -375,7 +374,7 @@
 
   <!-- MODAL: Cloud Setup / Go Live -->
   <div id="modal-cloud" class="hidden fixed inset-0 z-40 modal-backdrop flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-6 border border-slate-200 max-h-[90vh] overflow-y-auto space-y-5">
+    <div style='display' none; !important' class="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-6 border border-slate-200 max-h-[90vh] overflow-y-auto space-y-5">
       <div class="flex items-center justify-between">
         <div>
           <h3 class="text-lg font-bold text-slate-900">Go Live with Free Supabase Cloud</h3>
