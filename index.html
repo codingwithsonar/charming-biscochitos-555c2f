@@ -1,0 +1,2042 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClassPulse — Online Class, Attendance &amp; Fee Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca'
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; background-color: #f8fafc; color: #0f172a; }
+    .tab-btn.active { background-color: #eef2ff; color: #4338ca; font-weight: 600; }
+    .modal-backdrop { background-color: rgba(15, 23, 42, 0.5); backdrop-filter: blur(2px); }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #fff; }
+    }
+  </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Inter, system-ui, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.pointer-events-auto{pointer-events:auto}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.bottom-4{bottom:1rem}.left-3{left:0.75rem}.right-4{right:1rem}.top-0{top:0px}.top-1\/2{top:50%}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-6{margin-top:1.5rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-12{height:3rem}.h-14{height:3.5rem}.h-16{height:4rem}.h-3\.5{height:0.875rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-64{height:16rem}.h-8{height:2rem}.h-9{height:2.25rem}.max-h-\[90vh\]{max-height:90vh}.min-h-screen{min-height:100vh}.w-12{width:3rem}.w-14{width:3.5rem}.w-3\.5{width:0.875rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-8{width:2rem}.w-9{width:2.25rem}.w-full{width:100%}.min-w-0{min-width:0px}.max-w-2xl{max-width:42rem}.max-w-7xl{max-width:80rem}.max-w-\[200px\]{max-width:200px}.max-w-lg{max-width:32rem}.max-w-md{max-width:28rem}.max-w-sm{max-width:24rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.border-collapse{border-collapse:collapse}.-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-y-1{--tw-translate-y:0.25rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-1\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.375rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.375rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-x-1 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.25rem * var(--tw-space-x-reverse));margin-left:calc(0.25rem * calc(1 - var(--tw-space-x-reverse)))}.divide-y > :not([hidden]) ~ :not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px * calc(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px * var(--tw-divide-y-reverse))}.divide-slate-100 > :not([hidden]) ~ :not([hidden]){--tw-divide-opacity:1;border-color:rgb(241 245 249 / var(--tw-divide-opacity, 1))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.whitespace-nowrap{white-space:nowrap}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-amber-200{--tw-border-opacity:1;border-color:rgb(253 230 138 / var(--tw-border-opacity, 1))}.border-emerald-200{--tw-border-opacity:1;border-color:rgb(167 243 208 / var(--tw-border-opacity, 1))}.border-indigo-200{--tw-border-opacity:1;border-color:rgb(199 210 254 / var(--tw-border-opacity, 1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-indigo-400{--tw-border-opacity:1;border-color:rgb(129 140 248 / var(--tw-border-opacity, 1))}.border-rose-200{--tw-border-opacity:1;border-color:rgb(254 205 211 / var(--tw-border-opacity, 1))}.border-slate-100{--tw-border-opacity:1;border-color:rgb(241 245 249 / var(--tw-border-opacity, 1))}.bg-amber-50{--tw-bg-opacity:1;background-color:rgb(255 251 235 / var(--tw-bg-opacity, 1))}.bg-emerald-100{--tw-bg-opacity:1;background-color:rgb(209 250 229 / var(--tw-bg-opacity, 1))}.bg-emerald-50{--tw-bg-opacity:1;background-color:rgb(236 253 245 / var(--tw-bg-opacity, 1))}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-indigo-100{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.bg-indigo-50{--tw-bg-opacity:1;background-color:rgb(238 242 255 / var(--tw-bg-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-slate-900\/75{background-color:rgb(15 23 42 / 0.75)}.bg-slate-900\/90{background-color:rgb(15 23 42 / 0.9)}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-indigo-50\/70{background-color:rgb(238 242 255 / 0.7)}.bg-rose-50{--tw-bg-opacity:1;background-color:rgb(255 241 242 / var(--tw-bg-opacity, 1))}.bg-sky-50{--tw-bg-opacity:1;background-color:rgb(240 249 255 / var(--tw-bg-opacity, 1))}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.bg-slate-50\/70{background-color:rgb(248 250 252 / 0.7)}.bg-rose-600{--tw-bg-opacity:1;background-color:rgb(225 29 72 / var(--tw-bg-opacity, 1))}.p-1\.5{padding:0.375rem}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-0\.5{padding:0.125rem}.p-3\.5{padding:0.875rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-12{padding-top:3rem;padding-bottom:3rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pl-9{padding-left:2.25rem}.pr-3{padding-right:0.75rem}.pt-1{padding-top:0.25rem}.pt-2{padding-top:0.5rem}.pb-4{padding-bottom:1rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.text-2xl{font-size:1.5rem;line-height:2rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-relaxed{line-height:1.625}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-amber-700{--tw-text-opacity:1;color:rgb(180 83 9 / var(--tw-text-opacity, 1))}.text-emerald-600{--tw-text-opacity:1;color:rgb(5 150 105 / var(--tw-text-opacity, 1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87 / var(--tw-text-opacity, 1))}.text-emerald-800{--tw-text-opacity:1;color:rgb(6 95 70 / var(--tw-text-opacity, 1))}.text-emerald-900{--tw-text-opacity:1;color:rgb(6 78 59 / var(--tw-text-opacity, 1))}.text-indigo-600{--tw-text-opacity:1;color:rgb(79 70 229 / var(--tw-text-opacity, 1))}.text-indigo-700{--tw-text-opacity:1;color:rgb(67 56 202 / var(--tw-text-opacity, 1))}.text-indigo-800{--tw-text-opacity:1;color:rgb(55 48 163 / var(--tw-text-opacity, 1))}.text-indigo-950{--tw-text-opacity:1;color:rgb(30 27 75 / var(--tw-text-opacity, 1))}.text-rose-600{--tw-text-opacity:1;color:rgb(225 29 72 / var(--tw-text-opacity, 1))}.text-slate-100{--tw-text-opacity:1;color:rgb(241 245 249 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-emerald-500{--tw-text-opacity:1;color:rgb(16 185 129 / var(--tw-text-opacity, 1))}.text-indigo-500{--tw-text-opacity:1;color:rgb(99 102 241 / var(--tw-text-opacity, 1))}.text-rose-500{--tw-text-opacity:1;color:rgb(244 63 94 / var(--tw-text-opacity, 1))}.text-rose-700{--tw-text-opacity:1;color:rgb(190 18 60 / var(--tw-text-opacity, 1))}.text-sky-700{--tw-text-opacity:1;color:rgb(3 105 161 / var(--tw-text-opacity, 1))}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.opacity-0{opacity:0}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:border-slate-300:hover{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.hover\:bg-emerald-100:hover{--tw-bg-opacity:1;background-color:rgb(209 250 229 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-700:hover{--tw-bg-opacity:1;background-color:rgb(4 120 87 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-100:hover{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-700:hover{--tw-bg-opacity:1;background-color:rgb(67 56 202 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-100:hover{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-50:hover{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.hover\:bg-amber-100:hover{--tw-bg-opacity:1;background-color:rgb(254 243 199 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-100:hover{--tw-bg-opacity:1;background-color:rgb(255 228 230 / var(--tw-bg-opacity, 1))}.hover\:bg-sky-100:hover{--tw-bg-opacity:1;background-color:rgb(224 242 254 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-200:hover{--tw-bg-opacity:1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-50\/80:hover{background-color:rgb(248 250 252 / 0.8)}.hover\:bg-slate-800:hover{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.hover\:text-indigo-700:hover{--tw-text-opacity:1;color:rgb(67 56 202 / var(--tw-text-opacity, 1))}.hover\:text-slate-600:hover{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.hover\:text-rose-600:hover{--tw-text-opacity:1;color:rgb(225 29 72 / var(--tw-text-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-indigo-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(99 102 241 / var(--tw-ring-opacity, 1))}@media (min-width: 640px){.sm\:block{display:block}.sm\:inline{display:inline}.sm\:inline-flex{display:inline-flex}.sm\:hidden{display:none}.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:flex-row{flex-direction:row}.sm\:items-center{align-items:center}.sm\:p-8{padding:2rem}.sm\:px-0{padding-left:0px;padding-right:0px}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}}@media (min-width: 768px){.md\:flex{display:flex}.md\:hidden{display:none}}@media (min-width: 1024px){.lg\:col-span-4{grid-column:span 4 / span 4}.lg\:col-span-8{grid-column:span 8 / span 8}.lg\:inline-flex{display:inline-flex}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.lg\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}}</style><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Inter, system-ui, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.pointer-events-auto{pointer-events:auto}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.bottom-4{bottom:1rem}.left-3{left:0.75rem}.right-4{right:1rem}.top-0{top:0px}.top-1\/2{top:50%}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.mt-6{margin-top:1.5rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-12{height:3rem}.h-14{height:3.5rem}.h-16{height:4rem}.h-3\.5{height:0.875rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-64{height:16rem}.h-8{height:2rem}.h-9{height:2.25rem}.max-h-\[90vh\]{max-height:90vh}.min-h-screen{min-height:100vh}.w-12{width:3rem}.w-14{width:3.5rem}.w-3\.5{width:0.875rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-8{width:2rem}.w-9{width:2.25rem}.w-full{width:100%}.min-w-0{min-width:0px}.max-w-2xl{max-width:42rem}.max-w-7xl{max-width:80rem}.max-w-\[200px\]{max-width:200px}.max-w-lg{max-width:32rem}.max-w-md{max-width:28rem}.max-w-sm{max-width:24rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.border-collapse{border-collapse:collapse}.-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-y-1{--tw-translate-y:0.25rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-1\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.375rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.375rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.divide-y > :not([hidden]) ~ :not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px * calc(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px * var(--tw-divide-y-reverse))}.divide-slate-100 > :not([hidden]) ~ :not([hidden]){--tw-divide-opacity:1;border-color:rgb(241 245 249 / var(--tw-divide-opacity, 1))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.whitespace-nowrap{white-space:nowrap}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-emerald-200{--tw-border-opacity:1;border-color:rgb(167 243 208 / var(--tw-border-opacity, 1))}.border-indigo-200{--tw-border-opacity:1;border-color:rgb(199 210 254 / var(--tw-border-opacity, 1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.bg-emerald-100{--tw-bg-opacity:1;background-color:rgb(209 250 229 / var(--tw-bg-opacity, 1))}.bg-emerald-50{--tw-bg-opacity:1;background-color:rgb(236 253 245 / var(--tw-bg-opacity, 1))}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-indigo-100{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.bg-indigo-50{--tw-bg-opacity:1;background-color:rgb(238 242 255 / var(--tw-bg-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-slate-900\/75{background-color:rgb(15 23 42 / 0.75)}.bg-slate-900\/90{background-color:rgb(15 23 42 / 0.9)}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-1\.5{padding:0.375rem}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-12{padding-top:3rem;padding-bottom:3rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pl-9{padding-left:2.25rem}.pr-3{padding-right:0.75rem}.pt-1{padding-top:0.25rem}.pt-2{padding-top:0.5rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-relaxed{line-height:1.625}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-emerald-500{--tw-text-opacity:1;color:rgb(16 185 129 / var(--tw-text-opacity, 1))}.text-emerald-600{--tw-text-opacity:1;color:rgb(5 150 105 / var(--tw-text-opacity, 1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87 / var(--tw-text-opacity, 1))}.text-emerald-800{--tw-text-opacity:1;color:rgb(6 95 70 / var(--tw-text-opacity, 1))}.text-emerald-900{--tw-text-opacity:1;color:rgb(6 78 59 / var(--tw-text-opacity, 1))}.text-indigo-500{--tw-text-opacity:1;color:rgb(99 102 241 / var(--tw-text-opacity, 1))}.text-indigo-600{--tw-text-opacity:1;color:rgb(79 70 229 / var(--tw-text-opacity, 1))}.text-indigo-700{--tw-text-opacity:1;color:rgb(67 56 202 / var(--tw-text-opacity, 1))}.text-indigo-800{--tw-text-opacity:1;color:rgb(55 48 163 / var(--tw-text-opacity, 1))}.text-indigo-950{--tw-text-opacity:1;color:rgb(30 27 75 / var(--tw-text-opacity, 1))}.text-rose-500{--tw-text-opacity:1;color:rgb(244 63 94 / var(--tw-text-opacity, 1))}.text-rose-600{--tw-text-opacity:1;color:rgb(225 29 72 / var(--tw-text-opacity, 1))}.text-slate-100{--tw-text-opacity:1;color:rgb(241 245 249 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.opacity-0{opacity:0}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-emerald-100:hover{--tw-bg-opacity:1;background-color:rgb(209 250 229 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-700:hover{--tw-bg-opacity:1;background-color:rgb(4 120 87 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-100:hover{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-700:hover{--tw-bg-opacity:1;background-color:rgb(67 56 202 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-100:hover{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-50:hover{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.hover\:text-indigo-700:hover{--tw-text-opacity:1;color:rgb(67 56 202 / var(--tw-text-opacity, 1))}.hover\:text-slate-600:hover{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-indigo-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(99 102 241 / var(--tw-ring-opacity, 1))}@media (min-width: 640px){.sm\:block{display:block}.sm\:inline{display:inline}.sm\:inline-flex{display:inline-flex}.sm\:hidden{display:none}.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:flex-row{flex-direction:row}.sm\:items-center{align-items:center}.sm\:p-8{padding:2rem}.sm\:px-0{padding-left:0px;padding-right:0px}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}}@media (min-width: 768px){.md\:flex{display:flex}.md\:hidden{display:none}}@media (min-width: 1024px){.lg\:col-span-4{grid-column:span 4 / span 4}.lg\:col-span-8{grid-column:span 8 / span 8}.lg\:inline-flex{display:inline-flex}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.lg\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}}</style></head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+  <!-- Teacher PIN Lock Overlay (Active in Live Cloud Mode or when locked) -->
+  <div id="teacher-pin-overlay" class="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 sm:p-8 border border-slate-200 text-center">
+      <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center mx-auto mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="lock" class="lucide lucide-lock w-6 h-6"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+      </div>
+      <h2 class="text-lg font-bold text-slate-900">Teacher Dashboard Locked</h2>
+      <p class="text-xs text-slate-500 mt-1 mb-5">Enter your Teacher PIN to manage students, attendance, and fees.</p>
+      <form id="form-unlock-pin" class="space-y-3">
+        <input id="input-unlock-pin" type="password" inputmode="numeric" required="" placeholder="Enter PIN" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-center text-lg tracking-widest focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        <p id="pin-error-msg" class="hidden text-xs text-rose-600 font-medium">Incorrect PIN. Please try again.</p>
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition">
+          Unlock Dashboard
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Student Join Portal Overlay (when #join= or simulated) -->
+  <div id="student-join-overlay" class="hidden fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 border border-slate-200 text-center">
+      <div class="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle-2" class="lucide lucide-check-circle-2 w-8 h-8"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+      </div>
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 mb-3">
+        Attendance Marked Automatically
+      </span>
+      <h2 id="join-student-name" class="text-xl font-bold text-slate-900">Welcome!</h2>
+      <p id="join-session-info" class="text-sm text-slate-600 mt-1 mb-5"></p>
+      <div class="bg-slate-50 rounded-xl p-4 text-left text-xs text-slate-600 space-y-1.5 border border-slate-200 mb-6">
+        <div class="flex justify-between"><span>Status:</span><span class="font-semibold text-emerald-600">Present (Link Clicked)</span></div>
+        <div class="flex justify-between"><span>Check-in Time:</span><span id="join-timestamp" class="font-medium text-slate-800"></span></div>
+        <div class="flex justify-between"><span>Meeting URL:</span><span id="join-meet-url-text" class="font-mono text-indigo-600 truncate max-w-[200px]"></span></div>
+      </div>
+      <div class="flex flex-col gap-2.5">
+        <a id="join-meet-anchor" href="#" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition shadow-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="video" class="lucide lucide-video w-4 h-4"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg>
+          Open Google Meet Now
+        </a>
+        <button id="close-join-overlay" type="button" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-medium text-sm transition">
+          Return to Teacher Dashboard
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="graduation-cap" class="lucide lucide-graduation-cap w-5 h-5"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg>
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <h1 class="text-base sm:text-lg font-bold text-slate-900 truncate">ClassPulse</h1>
+            <span id="cloud-status-badge" class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Live Cloud</span>
+          </div>
+          <p class="text-[11px] text-slate-500 hidden sm:block">Student, Meet Attendance &amp; Fee Manager</p>
+        </div>
+      </div>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-1" id="desktop-nav">
+        <button data-tab="dashboard" class="tab-btn active px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-100 transition flex items-center gap-1.5 whitespace-nowrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="layout-dashboard" class="lucide lucide-layout-dashboard w-4 h-4"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rect><rect width="7" height="5" x="3" y="16" rx="1"></rect></svg> Dashboard
+        </button>
+        <button data-tab="students" class="tab-btn px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-100 transition flex items-center gap-1.5 whitespace-nowrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="users" class="lucide lucide-users w-4 h-4"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> Students
+        </button>
+        <button data-tab="classes" class="tab-btn px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-100 transition flex items-center gap-1.5 whitespace-nowrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="video" class="lucide lucide-video w-4 h-4"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg> Meet Links
+        </button>
+        <button data-tab="attendance" class="tab-btn px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-100 transition flex items-center gap-1.5 whitespace-nowrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="calendar-check" class="lucide lucide-calendar-check w-4 h-4"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="m9 16 2 2 4-4"></path></svg> Attendance
+        </button>
+        <button data-tab="fees" class="tab-btn px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-100 transition flex items-center gap-1.5 whitespace-nowrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="indian-rupee" class="lucide lucide-indian-rupee w-4 h-4"><path d="M6 3h12"></path><path d="M6 8h12"></path><path d="m6 13 8.5 8"></path><path d="M6 13h3"></path><path d="M9 13c6.667 0 6.667-10 0-10"></path></svg> Fees
+        </button>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <button id="btn-open-cloud-modal" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-xs font-semibold transition whitespace-nowrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="cloud" class="lucide lucide-cloud w-3.5 h-3.5"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>
+          <span class="hidden sm:inline">Go Live</span>
+        </button>
+        <button id="btn-export-data" type="button" title="Export Backup JSON" class="hidden lg:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-200 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="download" class="lucide lucide-download w-3.5 h-3.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg> Backup
+        </button>
+        <label title="Import Backup JSON" class="hidden lg:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-200 text-xs font-medium text-slate-700 hover:bg-slate-50 transition cursor-pointer">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="upload" class="lucide lucide-upload w-3.5 h-3.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" x2="12" y1="3" y2="15"></line></svg> Restore
+          <input id="input-import-data" type="file" accept=".json" class="hidden">
+        </label>
+        <button id="btn-quick-add-student" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-medium transition shadow-sm whitespace-nowrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-plus" class="lucide lucide-user-plus w-4 h-4"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" x2="19" y1="8" y2="14"></line><line x1="22" x2="16" y1="11" y2="11"></line></svg>
+          <span class="hidden sm:inline">Register Student</span>
+          <span class="sm:hidden">Add</span>
+        </button>
+        <button id="btn-mobile-menu" type="button" class="md:hidden p-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50" aria-label="Toggle Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="menu" class="lucide lucide-menu w-5 h-5"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav Drawer -->
+    <div id="mobile-nav" class="hidden md:hidden border-t border-slate-200 bg-white px-4 py-2 space-y-1">
+      <button data-tab="dashboard" class="tab-btn active w-full text-left px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-100 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="layout-dashboard" class="lucide lucide-layout-dashboard w-4 h-4"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rect><rect width="7" height="5" x="3" y="16" rx="1"></rect></svg> Dashboard
+      </button>
+      <button data-tab="students" class="tab-btn w-full text-left px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-100 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="users" class="lucide lucide-users w-4 h-4"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> Students
+      </button>
+      <button data-tab="classes" class="tab-btn w-full text-left px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-100 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="video" class="lucide lucide-video w-4 h-4"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg> Meet Links
+      </button>
+      <button data-tab="attendance" class="tab-btn w-full text-left px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-100 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="calendar-check" class="lucide lucide-calendar-check w-4 h-4"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="m9 16 2 2 4-4"></path></svg> Attendance
+      </button>
+      <button data-tab="fees" class="tab-btn w-full text-left px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-100 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="indian-rupee" class="lucide lucide-indian-rupee w-4 h-4"><path d="M6 3h12"></path><path d="M6 8h12"></path><path d="m6 13 8.5 8"></path><path d="M6 13h3"></path><path d="M9 13c6.667 0 6.667-10 0-10"></path></svg> Fees
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6">
+
+    <!-- DASHBOARD TAB -->
+    <section id="tab-dashboard" class="tab-panel space-y-6">
+      <div id="dashboard-banner" class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-start gap-3">
+          <div class="p-2 rounded-lg bg-indigo-100 text-indigo-700 shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sparkles" class="lucide lucide-sparkles w-5 h-5"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path d="M20 3v4"></path><path d="M22 5h-4"></path><path d="M4 17v2"></path><path d="M5 18H3"></path></svg>
+          </div>
+          <div>
+            <h2 class="text-sm font-semibold text-indigo-950">Automated Google Meet Attendance Ready</h2>
+            <p id="dashboard-banner-text" class="text-xs text-indigo-800 mt-0.5">Connected to <strong>Supabase Live Cloud</strong>. Student Meet-link clicks from any device sync directly to your dashboard.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <button id="btn-goto-classes" type="button" class="px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition">
+            Send Meet Links →
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="kpi-grid">
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="flex items-center justify-between text-xs font-medium text-slate-500">
+              <span>Registered Students</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="users" class="lucide lucide-users w-4 h-4 text-indigo-500"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <div class="text-2xl font-bold text-slate-900 mt-2">0</div>
+            <div class="text-xs text-slate-500 mt-1">0 active batches</div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="flex items-center justify-between text-xs font-medium text-slate-500">
+              <span>Overall Attendance</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="calendar-check" class="lucide lucide-calendar-check w-4 h-4 text-emerald-500"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="m9 16 2 2 4-4"></path></svg>
+            </div>
+            <div class="text-2xl font-bold text-slate-900 mt-2">0%</div>
+            <div class="text-xs text-slate-500 mt-1">0 of 0 check-ins</div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="flex items-center justify-between text-xs font-medium text-slate-500">
+              <span>Fees Collected</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="wallet" class="lucide lucide-wallet w-4 h-4 text-emerald-600"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg>
+            </div>
+            <div class="text-2xl font-bold text-emerald-600 mt-2">₹0</div>
+            <div class="text-xs text-slate-500 mt-1">Out of ₹0 expected</div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="flex items-center justify-between text-xs font-medium text-slate-500">
+              <span>Pending / Overdue Fees</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="alert-circle" class="lucide lucide-alert-circle w-4 h-4 text-rose-500"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>
+            </div>
+            <div class="text-2xl font-bold text-rose-600 mt-2">₹0</div>
+            <div class="text-xs text-slate-500 mt-1">0 students with balance</div>
+          </div>
+        </div>
+
+      <!-- Charts Row -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-semibold text-slate-900">Session Attendance Overview</h3>
+            <span class="text-xs text-slate-500">Present vs Absent</span>
+          </div>
+          <div class="relative h-64">
+            <canvas id="chart-attendance" style="box-sizing: border-box; display: block; height: 256px; width: 562px;" width="562" height="256"></canvas>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-semibold text-slate-900">Fee Collection Breakdown</h3>
+            <span class="text-xs text-slate-500">By Student Status</span>
+          </div>
+          <div class="relative h-64">
+            <canvas id="chart-fees" style="box-sizing: border-box; display: block; height: 256px; width: 562px;" width="562" height="256"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity & Upcoming Sessions -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-semibold text-slate-900">Active Class Sessions</h3>
+            <button data-jump="classes" class="text-xs font-medium text-indigo-600 hover:text-indigo-700">Manage all</button>
+          </div>
+          <div id="dashboard-sessions-list" class="space-y-3"><p class="text-xs text-slate-500">No class sessions scheduled yet.</p></div>
+        </div>
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-semibold text-slate-900">Pending Fee Reminders</h3>
+            <button data-jump="fees" class="text-xs font-medium text-indigo-600 hover:text-indigo-700">Update fees</button>
+          </div>
+          <div id="dashboard-pending-fees" class="space-y-3"><p class="text-xs text-emerald-600 font-medium">All registered students have paid in full!</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STUDENTS TAB -->
+    <section id="tab-students" class="tab-panel hidden space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Student Directory &amp; Registration</h2>
+          <p class="text-xs text-slate-500">Register students, assign batches, and manage contact &amp; fee profiles.</p>
+        </div>
+        <button id="btn-open-student-modal" type="button" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium transition">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-plus" class="lucide lucide-user-plus w-4 h-4"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" x2="19" y1="8" y2="14"></line><line x1="22" x2="16" y1="11" y2="11"></line></svg> Register New Student
+        </button>
+      </div>
+
+      <!-- Filters -->
+      <div class="bg-white rounded-xl border border-slate-200 p-4 flex flex-col sm:flex-row gap-3">
+        <div class="relative flex-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="search" class="lucide lucide-search w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+          <input id="student-search" type="text" placeholder="Search by name, email, phone, or batch..." class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <select id="student-batch-filter" class="px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"><option value="all">All Batches</option></select>
+        <select id="student-fee-filter" class="px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <option value="all">All Fee Statuses</option>
+          <option value="Paid">Paid</option>
+          <option value="Pending">Pending</option>
+          <option value="Partial">Partial</option>
+          <option value="Overdue">Overdue</option>
+        </select>
+      </div>
+
+      <!-- Student Table -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                <th class="py-3 px-4">Student</th>
+                <th class="py-3 px-4">Batch / Course</th>
+                <th class="py-3 px-4">Contact</th>
+                <th class="py-3 px-4">Attendance</th>
+                <th class="py-3 px-4">Fee Status</th>
+                <th class="py-3 px-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="students-table-body" class="divide-y divide-slate-100 text-sm"><tr><td colspan="6" class="py-8 text-center text-slate-500 text-sm">No matching students found.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLASSES & MEET LINKS TAB -->
+    <section id="tab-classes" class="tab-panel hidden space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Online Classes &amp; Automated Meet Links</h2>
+          <p class="text-xs text-slate-500">Create Google Meet sessions and send trackable links that auto-mark attendance on click.</p>
+        </div>
+        <button id="btn-open-session-modal" type="button" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium transition">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus" class="lucide lucide-plus w-4 h-4"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg> New Class Session
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-4 space-y-3" id="sessions-sidebar"><div class="bg-white rounded-xl border border-slate-200 p-4 text-xs text-slate-500">No sessions created yet.</div></div>
+        <div class="lg:col-span-8 bg-white rounded-xl border border-slate-200 p-5 shadow-sm" id="session-detail-panel"><div class="text-center py-12 text-slate-500 text-sm">Create a class session to generate automated Google Meet attendance links.</div></div>
+      </div>
+    </section>
+
+    <!-- ATTENDANCE TAB -->
+    <section id="tab-attendance" class="tab-panel hidden space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Attendance Register &amp; Click Logs</h2>
+          <p class="text-xs text-slate-500">Review auto-marked link clicks or manually update attendance for any session.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <select id="attendance-session-select" class="px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                <th class="py-3 px-4">Student</th>
+                <th class="py-3 px-4">Batch</th>
+                <th class="py-3 px-4">Status</th>
+                <th class="py-3 px-4">Source / Timestamp</th>
+                <th class="py-3 px-4 text-right">Mark Manually</th>
+              </tr>
+            </thead>
+            <tbody id="attendance-table-body" class="divide-y divide-slate-100 text-sm"><tr><td colspan="5" class="py-8 text-center text-slate-500 text-sm">No sessions available.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEES TAB -->
+    <section id="tab-fees" class="tab-panel hidden space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Fee Management &amp; Payment Details</h2>
+          <p class="text-xs text-slate-500">Record fee payments, update payment status, and generate printable receipts.</p>
+        </div>
+        <button id="btn-open-payment-modal" type="button" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus-circle" class="lucide lucide-plus-circle w-4 h-4"><circle cx="12" cy="12" r="10"></circle><path d="M8 12h8"></path><path d="M12 8v8"></path></svg> Record Fee Payment
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="fee-summary-cards">
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="text-xs font-medium text-slate-500">Total Expected Fees</div>
+            <div class="text-xl font-bold text-slate-900 mt-1">₹0</div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="text-xs font-medium text-slate-500">Total Collected</div>
+            <div class="text-xl font-bold text-emerald-600 mt-1">₹0</div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="text-xs font-medium text-slate-500">Outstanding Balance</div>
+            <div class="text-xl font-bold text-rose-600 mt-1">₹0</div>
+          </div>
+        </div>
+
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                <th class="py-3 px-4">Student</th>
+                <th class="py-3 px-4">Monthly Fee</th>
+                <th class="py-3 px-4">Paid</th>
+                <th class="py-3 px-4">Balance</th>
+                <th class="py-3 px-4">Status</th>
+                <th class="py-3 px-4">Last Payment</th>
+                <th class="py-3 px-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="fees-table-body" class="divide-y divide-slate-100 text-sm"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+        <h3 class="text-sm font-semibold text-slate-900 mb-3">Recent Fee Transactions</h3>
+        <div id="payment-history-list" class="divide-y divide-slate-100 text-sm"><p class="text-xs text-slate-500 py-2">No transactions recorded yet.</p></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: Cloud Setup / Go Live -->
+  <div id="modal-cloud" class="fixed inset-0 z-40 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-6 border border-slate-200 max-h-[90vh] overflow-y-auto space-y-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">Go Live with Free Supabase Cloud</h3>
+          <p class="text-xs text-slate-500">Connect your free Supabase database so student Meet-link clicks sync from any device.</p>
+        </div>
+        <button type="button" data-close-modal="modal-cloud" class="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="x" class="lucide lucide-x w-5 h-5"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+        </button>
+      </div>
+
+      <!-- Step 1: SQL Script -->
+      <div class="bg-slate-50 rounded-xl border border-slate-200 p-4 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-indigo-700">Step 1: Run this SQL in Supabase SQL Editor</span>
+          <button id="btn-copy-sql" type="button" class="px-2.5 py-1 rounded-md bg-white border border-slate-200 hover:bg-slate-100 text-xs font-medium text-slate-700 inline-flex items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="copy" class="lucide lucide-copy w-3.5 h-3.5"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg> Copy SQL
+          </button>
+        </div>
+        <pre id="supabase-sql-block" class="text-[11px] bg-slate-900 text-slate-100 p-3 rounded-lg overflow-x-auto font-mono leading-relaxed">create table if not exists students (
+  id text primary key,
+  name text not null,
+  batch text not null,
+  email text,
+  phone text,
+  monthly_fee numeric default 0,
+  paid_amount numeric default 0,
+  fee_status text default 'Pending',
+  due_date text,
+  last_payment_date text,
+  notes text
+);
+
+create table if not exists sessions (
+  id text primary key,
+  title text not null,
+  batch text not null,
+  datetime text not null,
+  meet_url text not null
+);
+
+create table if not exists attendance (
+  id text primary key,
+  session_id text not null,
+  student_id text not null,
+  status text not null,
+  source text,
+  timestamp text
+);
+
+create table if not exists payments (
+  id text primary key,
+  student_id text not null,
+  amount numeric not null,
+  date text not null,
+  method text,
+  ref text,
+  notes text
+);
+
+alter table students disable row level security;
+alter table sessions disable row level security;
+alter table attendance disable row level security;
+alter table payments disable row level security;</pre>
+      </div>
+
+      <!-- Step 2: Credentials -->
+      <form id="form-cloud-config" class="space-y-3">
+        <div class="text-xs font-bold uppercase tracking-wider text-indigo-700">Step 2: Connect Supabase &amp; Set Teacher PIN</div>
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">Supabase Project URL *</label>
+          <input id="cloud-supabase-url" type="url" required="" placeholder="https://your-project-id.supabase.co" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">Supabase Anon (Public) Key *</label>
+          <input id="cloud-supabase-key" type="text" required="" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">Teacher Dashboard PIN (protects live site)</label>
+          <input id="cloud-teacher-pin" type="text" required="" value="1234" placeholder="1234" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div class="flex flex-wrap items-center gap-2 pt-1">
+          <button type="submit" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold transition">
+            Save &amp; Test Cloud Connection
+          </button>
+          <button id="btn-push-local-to-cloud" type="button" class="px-4 py-2 rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-xs sm:text-sm font-semibold transition">
+            Upload Current Data to Cloud
+          </button>
+        </div>
+      </form>
+
+      <!-- Step 3: Download Live index.html -->
+      <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-emerald-800">Step 3: Publish Online for Free</div>
+          <p class="text-xs text-emerald-900 mt-0.5">Download your configured <strong>index.html</strong> file and drag-and-drop it onto <strong>app.netlify.com/drop</strong>.</p>
+        </div>
+        <button id="btn-download-live-html" type="button" class="shrink-0 inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition shadow-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="download" class="lucide lucide-download w-4 h-4"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg> Download Live index.html
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Register / Edit Student -->
+  <div id="modal-student" class="hidden fixed inset-0 z-40 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 border border-slate-200 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-4">
+        <h3 id="modal-student-title" class="text-lg font-bold text-slate-900">Register Student</h3>
+        <button type="button" data-close-modal="modal-student" class="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="x" class="lucide lucide-x w-5 h-5"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+        </button>
+      </div>
+      <form id="form-student" class="space-y-4">
+        <input type="hidden" id="student-id">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Full Name *</label>
+            <input id="student-name" type="text" required="" placeholder="e.g. Aarav Sharma" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Batch / Course *</label>
+            <input id="student-batch" type="text" required="" placeholder="e.g. Class 10 Math" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Email Address *</label>
+            <input id="student-email" type="email" required="" placeholder="student@example.com" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Phone / WhatsApp *</label>
+            <input id="student-phone" type="tel" required="" placeholder="+91 9876543210" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Monthly Fee (₹) *</label>
+            <input id="student-fee-amount" type="number" min="0" required="" placeholder="1500" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Fee Due Date</label>
+            <input id="student-fee-due" type="date" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">Parent / Notes</label>
+          <input id="student-notes" type="text" placeholder="Optional parent name or notes" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" data-close-modal="modal-student" class="px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium">Save Student</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: New Class Session -->
+  <div id="modal-session" class="hidden fixed inset-0 z-40 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 border border-slate-200">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold text-slate-900">Create Online Class Session</h3>
+        <button type="button" data-close-modal="modal-session" class="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="x" class="lucide lucide-x w-5 h-5"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+        </button>
+      </div>
+      <form id="form-session" class="space-y-4">
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">Class Title *</label>
+          <input id="session-title" type="text" required="" placeholder="e.g. Quadratic Equations Live Class" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Target Batch *</label>
+            <select id="session-batch" required="" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Date &amp; Time *</label>
+            <input id="session-datetime" type="datetime-local" required="" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">Google Meet Link *</label>
+          <input id="session-meet-url" type="url" required="" placeholder="https://meet.google.com/abc-defg-hij" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" data-close-modal="modal-session" class="px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium">Create &amp; Generate Links</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Record / Update Fee Payment -->
+  <div id="modal-payment" class="hidden fixed inset-0 z-40 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 border border-slate-200">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold text-slate-900">Update Fee Payment Details</h3>
+        <button type="button" data-close-modal="modal-payment" class="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="x" class="lucide lucide-x w-5 h-5"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+        </button>
+      </div>
+      <form id="form-payment" class="space-y-4">
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">Select Student *</label>
+          <select id="payment-student-id" required="" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Amount Paid (₹) *</label>
+            <input id="payment-amount" type="number" min="1" required="" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Payment Date *</label>
+            <input id="payment-date" type="date" required="" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Payment Method *</label>
+            <select id="payment-method" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="UPI">UPI (GPay / PhonePe / Paytm)</option>
+              <option value="Bank Transfer">Bank Transfer (NEFT/IMPS)</option>
+              <option value="Card">Debit / Credit Card</option>
+              <option value="Cash">Cash</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Transaction / Receipt ID</label>
+            <input id="payment-ref" type="text" placeholder="e.g. UPI-4328910" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">Fee Status After Payment *</label>
+          <select id="payment-status" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="Paid">Paid in Full</option>
+            <option value="Partial">Partial Payment</option>
+            <option value="Pending">Pending</option>
+            <option value="Overdue">Overdue</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">Remarks</label>
+          <input id="payment-notes" type="text" placeholder="e.g. November tuition fee" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" data-close-modal="modal-payment" class="px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium">Save Payment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Fee Receipt -->
+  <div id="modal-receipt" class="hidden fixed inset-0 z-40 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 border border-slate-200">
+      <div id="receipt-content" class="space-y-4"></div>
+      <div class="flex justify-end gap-2 mt-6 no-print">
+        <button type="button" data-close-modal="modal-receipt" class="px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50">Close</button>
+        <button id="btn-print-receipt" type="button" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="printer" class="lucide lucide-printer w-4 h-4"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg> Print Receipt
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      // /*CLOUD_CONFIG_START*/
+      const EMBEDDED_CLOUD_CONFIG = {
+        "supabaseUrl": "https://kubexiybreiyysbtnrhr.supabase.co",
+        "supabaseAnonKey": "sb_publishable_Q2LtcqIpuZtw-RiCZCwZXA_1s3eoaJa",
+        "teacherPin": "9458"
+      };
+      // /*CLOUD_CONFIG_END*/
+
+      const STORAGE_KEY = 'classpulse_state_v1';
+      const CLOUD_STORAGE_KEY = 'classpulse_cloud_cfg_v1';
+
+      const defaultState = {
+        students: [
+          {
+            id: 'stu_1',
+            name: 'Aarav Sharma',
+            batch: 'Class 10 Math',
+            email: 'aarav.sharma@example.com',
+            phone: '+91 9876543210',
+            monthlyFee: 1800,
+            paidAmount: 1800,
+            feeStatus: 'Paid',
+            dueDate: '2026-11-10',
+            lastPaymentDate: '2026-11-05',
+            notes: 'Parent: Rajesh Sharma'
+          },
+          {
+            id: 'stu_2',
+            name: 'Priya Verma',
+            batch: 'Class 10 Math',
+            email: 'priya.verma@example.com',
+            phone: '+91 9823456789',
+            monthlyFee: 1800,
+            paidAmount: 1000,
+            feeStatus: 'Partial',
+            dueDate: '2026-11-15',
+            lastPaymentDate: '2026-11-12',
+            notes: 'Balance ₹800 promised by Friday'
+          },
+          {
+            id: 'stu_3',
+            name: 'Rohan Das',
+            batch: 'Class 10 Math',
+            email: 'rohan.das@example.com',
+            phone: '+91 9911223344',
+            monthlyFee: 1800,
+            paidAmount: 0,
+            feeStatus: 'Pending',
+            dueDate: '2026-11-28',
+            lastPaymentDate: '',
+            notes: ''
+          },
+          {
+            id: 'stu_4',
+            name: 'Ananya Gupta',
+            batch: 'Class 12 Physics',
+            email: 'ananya.gupta@example.com',
+            phone: '+91 9811223355',
+            monthlyFee: 2400,
+            paidAmount: 2400,
+            feeStatus: 'Paid',
+            dueDate: '2026-11-10',
+            lastPaymentDate: '2026-11-08',
+            notes: 'Regular topper'
+          },
+          {
+            id: 'stu_5',
+            name: 'Kabir Khan',
+            batch: 'Class 12 Physics',
+            email: 'kabir.khan@example.com',
+            phone: '+91 9765432109',
+            monthlyFee: 2400,
+            paidAmount: 0,
+            feeStatus: 'Overdue',
+            dueDate: '2026-11-05',
+            lastPaymentDate: '',
+            notes: 'Reminder sent on WhatsApp'
+          }
+        ],
+        sessions: [
+          {
+            id: 'ses_1',
+            title: 'Quadratic Equations & Roots',
+            batch: 'Class 10 Math',
+            datetime: '2026-11-26T19:00',
+            meetUrl: 'https://meet.google.com/abc-defg-hij'
+          },
+          {
+            id: 'ses_2',
+            title: 'Electromagnetic Induction Lab',
+            batch: 'Class 12 Physics',
+            datetime: '2026-11-27T17:30',
+            meetUrl: 'https://meet.google.com/xyz-uvwx-rst'
+          }
+        ],
+        attendance: [
+          { sessionId: 'ses_1', studentId: 'stu_1', status: 'Present', source: 'Meet Link Click', timestamp: '2026-11-26 18:58' },
+          { sessionId: 'ses_1', studentId: 'stu_2', status: 'Present', source: 'Meet Link Click', timestamp: '2026-11-26 19:02' },
+          { sessionId: 'ses_1', studentId: 'stu_3', status: 'Absent', source: 'Manual', timestamp: '2026-11-26 19:10' },
+          { sessionId: 'ses_2', studentId: 'stu_4', status: 'Present', source: 'Meet Link Click', timestamp: '2026-11-26 17:29' }
+        ],
+        payments: [
+          { id: 'pay_1', studentId: 'stu_1', amount: 1800, date: '2026-11-05', method: 'UPI', ref: 'UPI-904128', notes: 'November Fee' },
+          { id: 'pay_2', studentId: 'stu_4', amount: 2400, date: '2026-11-08', method: 'Bank Transfer', ref: 'IMPS-339102', notes: 'November Fee' },
+          { id: 'pay_3', studentId: 'stu_2', amount: 1000, date: '2026-11-12', method: 'UPI', ref: 'UPI-772190', notes: 'Partial Nov Fee' }
+        ]
+      };
+
+      let cloudConfig = loadCloudConfig();
+      let state = loadState();
+      let activeTab = 'dashboard';
+      let selectedSessionId = state.sessions[0]?.id || null;
+      let attendanceChart = null;
+      let feeChart = null;
+
+      function loadCloudConfig() {
+        if (EMBEDDED_CLOUD_CONFIG.supabaseUrl && EMBEDDED_CLOUD_CONFIG.supabaseAnonKey) {
+          return { ...EMBEDDED_CLOUD_CONFIG };
+        }
+        try {
+          const raw = localStorage.getItem(CLOUD_STORAGE_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && parsed.supabaseUrl) return parsed;
+          }
+        } catch (e) {}
+        return { ...EMBEDDED_CLOUD_CONFIG };
+      }
+
+      function saveCloudConfig(cfg) {
+        cloudConfig = cfg;
+        try {
+          localStorage.setItem(CLOUD_STORAGE_KEY, JSON.stringify(cfg));
+        } catch (e) {}
+      }
+
+      function isCloudEnabled() {
+        return Boolean(cloudConfig.supabaseUrl && cloudConfig.supabaseAnonKey);
+      }
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && Array.isArray(parsed.students)) return parsed;
+          }
+        } catch (e) {}
+        return JSON.parse(JSON.stringify(defaultState));
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {}
+      }
+
+      async function sbFetch(path, options = {}) {
+        if (!isCloudEnabled()) return null;
+        const baseUrl = cloudConfig.supabaseUrl.replace(/\/+$/, '');
+        const headers = {
+          'apikey': cloudConfig.supabaseAnonKey,
+          'Authorization': `Bearer ${cloudConfig.supabaseAnonKey}`,
+          'Content-Type': 'application/json',
+          ...(options.headers || {})
+        };
+        const res = await fetch(`${baseUrl}/rest/v1/${path}`, { ...options, headers });
+        if (!res.ok) {
+          const errText = await res.text();
+          throw new Error(errText || `HTTP ${res.status}`);
+        }
+        if (res.status === 204) return null;
+        const txt = await res.text();
+        return txt ? JSON.parse(txt) : null;
+      }
+
+      async function syncFromCloud() {
+        if (!isCloudEnabled()) return;
+        try {
+          const [students, sessions, attendance, payments] = await Promise.all([
+            sbFetch('students?select=*'),
+            sbFetch('sessions?select=*'),
+            sbFetch('attendance?select=*'),
+            sbFetch('payments?select=*')
+          ]);
+          state.students = (students || []).map(r => ({
+            id: r.id,
+            name: r.name,
+            batch: r.batch,
+            email: r.email || '',
+            phone: r.phone || '',
+            monthlyFee: Number(r.monthly_fee || 0),
+            paidAmount: Number(r.paid_amount || 0),
+            feeStatus: r.fee_status || 'Pending',
+            dueDate: r.due_date || '',
+            lastPaymentDate: r.last_payment_date || '',
+            notes: r.notes || ''
+          }));
+          state.sessions = (sessions || []).map(r => ({
+            id: r.id,
+            title: r.title,
+            batch: r.batch,
+            datetime: r.datetime,
+            meetUrl: r.meet_url
+          }));
+          state.attendance = (attendance || []).map(r => ({
+            sessionId: r.session_id,
+            studentId: r.student_id,
+            status: r.status,
+            source: r.source || 'Manual',
+            timestamp: r.timestamp || ''
+          }));
+          state.payments = (payments || []).map(r => ({
+            id: r.id,
+            studentId: r.student_id,
+            amount: Number(r.amount || 0),
+            date: r.date,
+            method: r.method || '',
+            ref: r.ref || '',
+            notes: r.notes || ''
+          }));
+          if (!selectedSessionId && state.sessions.length) selectedSessionId = state.sessions[0].id;
+          saveState();
+          renderAll();
+        } catch (err) {
+          showToast('Cloud sync warning: ' + err.message, 'error');
+        }
+      }
+
+      async function upsertStudentCloud(s) {
+        if (!isCloudEnabled()) return;
+        try {
+          await sbFetch('students?on_conflict=id', {
+            method: 'POST',
+            headers: { 'Prefer': 'resolution=merge-duplicates' },
+            body: JSON.stringify({
+              id: s.id,
+              name: s.name,
+              batch: s.batch,
+              email: s.email,
+              phone: s.phone,
+              monthly_fee: s.monthlyFee,
+              paid_amount: s.paidAmount,
+              fee_status: s.feeStatus,
+              due_date: s.dueDate,
+              last_payment_date: s.lastPaymentDate,
+              notes: s.notes
+            })
+          });
+        } catch (err) {
+          showToast('Cloud save failed: ' + err.message, 'error');
+        }
+      }
+
+      async function deleteStudentCloud(id) {
+        if (!isCloudEnabled()) return;
+        try {
+          await sbFetch(`students?id=eq.${encodeURIComponent(id)}`, { method: 'DELETE' });
+          await sbFetch(`attendance?student_id=eq.${encodeURIComponent(id)}`, { method: 'DELETE' });
+        } catch (err) {
+          showToast('Cloud delete failed: ' + err.message, 'error');
+        }
+      }
+
+      async function upsertSessionCloud(ses) {
+        if (!isCloudEnabled()) return;
+        try {
+          await sbFetch('sessions?on_conflict=id', {
+            method: 'POST',
+            headers: { 'Prefer': 'resolution=merge-duplicates' },
+            body: JSON.stringify({
+              id: ses.id,
+              title: ses.title,
+              batch: ses.batch,
+              datetime: ses.datetime,
+              meet_url: ses.meetUrl
+            })
+          });
+        } catch (err) {
+          showToast('Cloud save failed: ' + err.message, 'error');
+        }
+      }
+
+      async function deleteSessionCloud(id) {
+        if (!isCloudEnabled()) return;
+        try {
+          await sbFetch(`sessions?id=eq.${encodeURIComponent(id)}`, { method: 'DELETE' });
+          await sbFetch(`attendance?session_id=eq.${encodeURIComponent(id)}`, { method: 'DELETE' });
+        } catch (err) {
+          showToast('Cloud delete failed: ' + err.message, 'error');
+        }
+      }
+
+      async function upsertAttendanceCloud(att) {
+        if (!isCloudEnabled()) return;
+        try {
+          await sbFetch('attendance?on_conflict=id', {
+            method: 'POST',
+            headers: { 'Prefer': 'resolution=merge-duplicates' },
+            body: JSON.stringify({
+              id: `${att.sessionId}__${att.studentId}`,
+              session_id: att.sessionId,
+              student_id: att.studentId,
+              status: att.status,
+              source: att.source,
+              timestamp: att.timestamp
+            })
+          });
+        } catch (err) {
+          showToast('Cloud attendance save failed: ' + err.message, 'error');
+        }
+      }
+
+      async function insertPaymentCloud(p) {
+        if (!isCloudEnabled()) return;
+        try {
+          await sbFetch('payments?on_conflict=id', {
+            method: 'POST',
+            headers: { 'Prefer': 'resolution=merge-duplicates' },
+            body: JSON.stringify({
+              id: p.id,
+              student_id: p.studentId,
+              amount: p.amount,
+              date: p.date,
+              method: p.method,
+              ref: p.ref,
+              notes: p.notes
+            })
+          });
+        } catch (err) {
+          showToast('Cloud payment save failed: ' + err.message, 'error');
+        }
+      }
+
+      function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        const colors = type === 'error'
+          ? 'bg-rose-600 text-white'
+          : type === 'info'
+          ? 'bg-slate-800 text-white'
+          : 'bg-emerald-600 text-white';
+        const el = document.createElement('div');
+        el.className = `pointer-events-auto px-4 py-3 rounded-xl shadow-lg text-xs sm:text-sm font-medium flex items-center justify-between gap-3 transition-all ${colors}`;
+        el.innerHTML = `<span>${escapeHtml(message)}</span>`;
+        container.appendChild(el);
+        setTimeout(() => {
+          el.classList.add('opacity-0', 'translate-y-1');
+          setTimeout(() => el.remove(), 250);
+        }, 3200);
+      }
+
+      function escapeHtml(str) {
+        return String(str ?? '').replace(/[&<>"']/g, s => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[s]));
+      }
+
+      function copyText(text, label = 'Copied to clipboard!') {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(() => showToast(label)).catch(() => fallbackCopy(text, label));
+        } else {
+          fallbackCopy(text, label);
+        }
+      }
+
+      function fallbackCopy(text, label) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          showToast(label);
+        } catch (e) {
+          showToast('Copy failed. Please copy manually.', 'error');
+        }
+        ta.remove();
+      }
+
+      function formatCurrency(val) {
+        return '₹' + Number(val || 0).toLocaleString('en-IN');
+      }
+
+      function getBatches() {
+        const set = new Set(state.students.map(s => s.batch).filter(Boolean));
+        state.sessions.forEach(ses => ses.batch && set.add(ses.batch));
+        return Array.from(set);
+      }
+
+      function getStudentAttendanceRate(studentId) {
+        const stu = state.students.find(s => s.id === studentId);
+        if (!stu) return { present: 0, total: 0, pct: 0 };
+        const batchSessions = state.sessions.filter(ses => ses.batch === stu.batch);
+        if (!batchSessions.length) return { present: 0, total: 0, pct: 0 };
+        let present = 0;
+        batchSessions.forEach(ses => {
+          const rec = state.attendance.find(a => a.sessionId === ses.id && a.studentId === studentId);
+          if (rec && rec.status === 'Present') present++;
+        });
+        return { present, total: batchSessions.length, pct: Math.round((present / batchSessions.length) * 100) };
+      }
+
+      function getTrackableJoinUrl(sessionId, studentId) {
+        const base = window.location.href.split('#')[0].split('?')[0];
+        return `${base}#join=${encodeURIComponent(sessionId)}&student=${encodeURIComponent(studentId)}`;
+      }
+
+      async function markAttendanceByJoin(sessionId, studentId, openOverlay = true) {
+        if (isCloudEnabled() && (!state.sessions.length || !state.students.length)) {
+          await syncFromCloud();
+        }
+        const session = state.sessions.find(s => s.id === sessionId);
+        const student = state.students.find(s => s.id === studentId);
+        if (!session || !student) {
+          showToast('Invalid class or student link.', 'error');
+          return;
+        }
+        const now = new Date();
+        const ts = now.toISOString().slice(0, 16).replace('T', ' ');
+        const existing = state.attendance.find(a => a.sessionId === sessionId && a.studentId === studentId);
+        const rec = {
+          sessionId,
+          studentId,
+          status: 'Present',
+          source: 'Meet Link Click',
+          timestamp: ts
+        };
+        if (existing) {
+          existing.status = rec.status;
+          existing.source = rec.source;
+          existing.timestamp = rec.timestamp;
+        } else {
+          state.attendance.push(rec);
+        }
+        saveState();
+        await upsertAttendanceCloud(rec);
+        renderAll();
+
+        if (openOverlay) {
+          document.getElementById('join-student-name').textContent = `Welcome, ${student.name}!`;
+          document.getElementById('join-session-info').textContent = `${session.title} (${session.batch})`;
+          document.getElementById('join-timestamp').textContent = ts;
+          document.getElementById('join-meet-url-text').textContent = session.meetUrl;
+          document.getElementById('join-meet-anchor').href = session.meetUrl;
+          document.getElementById('student-join-overlay').classList.remove('hidden');
+          if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+        showToast(`${student.name} marked Present via Meet link!`);
+      }
+
+      function checkHashJoin() {
+        const hash = window.location.hash || '';
+        if (hash.startsWith('#join=')) {
+          const params = new URLSearchParams(hash.slice(1));
+          const sesId = params.get('join');
+          const stuId = params.get('student');
+          if (sesId && stuId) {
+            markAttendanceByJoin(sesId, stuId, true);
+            return true;
+          }
+        }
+        return false;
+      }
+
+      function updateCloudBadge() {
+        const badge = document.getElementById('cloud-status-badge');
+        const bannerText = document.getElementById('dashboard-banner-text');
+        if (isCloudEnabled()) {
+          badge.textContent = 'Live Cloud';
+          badge.className = 'hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200';
+          bannerText.innerHTML = 'Connected to <strong>Supabase Live Cloud</strong>. Student Meet-link clicks from any device sync directly to your dashboard.';
+        } else {
+          badge.textContent = 'Local Demo';
+          badge.className = 'hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200';
+          bannerText.innerHTML = 'Create a class session in <strong>Meet Links</strong> to generate personalized student join URLs. Click <strong>Go Live</strong> in the header to connect your free Supabase database and publish online.';
+        }
+      }
+
+      function switchTab(tabName) {
+        activeTab = tabName;
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+        const target = document.getElementById(`tab-${tabName}`);
+        if (target) target.classList.remove('hidden');
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.tab === tabName);
+        });
+        document.getElementById('mobile-nav').classList.add('hidden');
+        renderAll();
+      }
+
+      function statusBadge(status) {
+        const map = {
+          Paid: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+          Present: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+          Partial: 'bg-amber-50 text-amber-700 border-amber-200',
+          Late: 'bg-amber-50 text-amber-700 border-amber-200',
+          Pending: 'bg-slate-100 text-slate-700 border-slate-200',
+          Overdue: 'bg-rose-50 text-rose-700 border-rose-200',
+          Absent: 'bg-rose-50 text-rose-700 border-rose-200'
+        };
+        const cls = map[status] || 'bg-slate-100 text-slate-700 border-slate-200';
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${cls}">${escapeHtml(status)}</span>`;
+      }
+
+      function renderDashboard() {
+        const totalStudents = state.students.length;
+        const totalExpected = state.students.reduce((sum, s) => sum + Number(s.monthlyFee || 0), 0);
+        const totalCollected = state.students.reduce((sum, s) => sum + Number(s.paidAmount || 0), 0);
+        const totalPending = Math.max(0, totalExpected - totalCollected);
+
+        const totalPossibleAttendance = state.sessions.reduce((acc, ses) => {
+          return acc + state.students.filter(st => st.batch === ses.batch).length;
+        }, 0);
+        const totalPresent = state.attendance.filter(a => a.status === 'Present').length;
+        const avgAttendance = totalPossibleAttendance > 0 ? Math.round((totalPresent / totalPossibleAttendance) * 100) : 0;
+
+        document.getElementById('kpi-grid').innerHTML = `
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="flex items-center justify-between text-xs font-medium text-slate-500">
+              <span>Registered Students</span>
+              <i data-lucide="users" class="w-4 h-4 text-indigo-500"></i>
+            </div>
+            <div class="text-2xl font-bold text-slate-900 mt-2">${totalStudents}</div>
+            <div class="text-xs text-slate-500 mt-1">${getBatches().length} active batches</div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="flex items-center justify-between text-xs font-medium text-slate-500">
+              <span>Overall Attendance</span>
+              <i data-lucide="calendar-check" class="w-4 h-4 text-emerald-500"></i>
+            </div>
+            <div class="text-2xl font-bold text-slate-900 mt-2">${avgAttendance}%</div>
+            <div class="text-xs text-slate-500 mt-1">${totalPresent} of ${totalPossibleAttendance} check-ins</div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="flex items-center justify-between text-xs font-medium text-slate-500">
+              <span>Fees Collected</span>
+              <i data-lucide="wallet" class="w-4 h-4 text-emerald-600"></i>
+            </div>
+            <div class="text-2xl font-bold text-emerald-600 mt-2">${formatCurrency(totalCollected)}</div>
+            <div class="text-xs text-slate-500 mt-1">Out of ${formatCurrency(totalExpected)} expected</div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="flex items-center justify-between text-xs font-medium text-slate-500">
+              <span>Pending / Overdue Fees</span>
+              <i data-lucide="alert-circle" class="w-4 h-4 text-rose-500"></i>
+            </div>
+            <div class="text-2xl font-bold text-rose-600 mt-2">${formatCurrency(totalPending)}</div>
+            <div class="text-xs text-slate-500 mt-1">${state.students.filter(s => s.feeStatus !== 'Paid').length} students with balance</div>
+          </div>
+        `;
+
+        const sesList = document.getElementById('dashboard-sessions-list');
+        if (!state.sessions.length) {
+          sesList.innerHTML = `<p class="text-xs text-slate-500">No class sessions scheduled yet.</p>`;
+        } else {
+          sesList.innerHTML = state.sessions.slice(0, 4).map(ses => {
+            const batchCount = state.students.filter(s => s.batch === ses.batch).length;
+            const presentCount = state.attendance.filter(a => a.sessionId === ses.id && a.status === 'Present').length;
+            return `
+              <div class="flex items-center justify-between gap-3 p-3 rounded-lg border border-slate-100 bg-slate-50/70">
+                <div class="min-w-0">
+                  <div class="text-sm font-semibold text-slate-900 truncate">${escapeHtml(ses.title)}</div>
+                  <div class="text-xs text-slate-500">${escapeHtml(ses.batch)} &bull; ${escapeHtml(ses.datetime.replace('T', ' '))}</div>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                  <span class="text-xs font-medium text-slate-600">${presentCount}/${batchCount} Present</span>
+                  <button data-open-session="${ses.id}" class="px-2.5 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-medium hover:bg-indigo-700">Links</button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+
+        const pendingEl = document.getElementById('dashboard-pending-fees');
+        const unpaid = state.students.filter(s => s.feeStatus !== 'Paid');
+        if (!unpaid.length) {
+          pendingEl.innerHTML = `<p class="text-xs text-emerald-600 font-medium">All registered students have paid in full!</p>`;
+        } else {
+          pendingEl.innerHTML = unpaid.slice(0, 4).map(s => {
+            const bal = Math.max(0, Number(s.monthlyFee) - Number(s.paidAmount));
+            return `
+              <div class="flex items-center justify-between gap-3 p-3 rounded-lg border border-slate-100 bg-slate-50/70">
+                <div class="min-w-0">
+                  <div class="text-sm font-semibold text-slate-900 truncate">${escapeHtml(s.name)}</div>
+                  <div class="text-xs text-slate-500">${escapeHtml(s.batch)} &bull; Balance: ${formatCurrency(bal)}</div>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                  ${statusBadge(s.feeStatus)}
+                  <button data-pay-student="${s.id}" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-medium hover:bg-emerald-700">Update</button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+
+        renderCharts();
+      }
+
+      function renderCharts() {
+        const attCanvas = document.getElementById('chart-attendance');
+        const feeCanvas = document.getElementById('chart-fees');
+        if (!attCanvas || !feeCanvas || typeof Chart === 'undefined') return;
+
+        const labels = state.sessions.map(s => s.title.length > 18 ? s.title.slice(0, 18) + '…' : s.title);
+        const presentData = state.sessions.map(s => state.attendance.filter(a => a.sessionId === s.id && a.status === 'Present').length);
+        const absentData = state.sessions.map(s => {
+          const total = state.students.filter(st => st.batch === s.batch).length;
+          const pres = state.attendance.filter(a => a.sessionId === s.id && a.status === 'Present').length;
+          return Math.max(0, total - pres);
+        });
+
+        if (attendanceChart) attendanceChart.destroy();
+        attendanceChart = new Chart(attCanvas, {
+          type: 'bar',
+          data: {
+            labels: labels.length ? labels : ['No Sessions'],
+            datasets: [
+              { label: 'Present', data: presentData.length ? presentData : [0], backgroundColor: '#10b981', borderRadius: 6 },
+              { label: 'Absent', data: absentData.length ? absentData : [0], backgroundColor: '#f43f5e', borderRadius: 6 }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
+            plugins: { legend: { position: 'bottom' } }
+          }
+        });
+
+        const counts = { Paid: 0, Partial: 0, Pending: 0, Overdue: 0 };
+        state.students.forEach(s => { counts[s.feeStatus] = (counts[s.feeStatus] || 0) + 1; });
+
+        if (feeChart) feeChart.destroy();
+        feeChart = new Chart(feeCanvas, {
+          type: 'doughnut',
+          data: {
+            labels: ['Paid', 'Partial', 'Pending', 'Overdue'],
+            datasets: [{
+              data: [counts.Paid, counts.Partial, counts.Pending, counts.Overdue],
+              backgroundColor: ['#10b981', '#f59e0b', '#94a3b8', '#f43f5e'],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } }
+          }
+        });
+      }
+
+      function renderStudents() {
+        const search = (document.getElementById('student-search').value || '').toLowerCase();
+        const batchFilter = document.getElementById('student-batch-filter').value;
+        const feeFilter = document.getElementById('student-fee-filter').value;
+
+        const batchSel = document.getElementById('student-batch-filter');
+        const currentBatchVal = batchSel.value;
+        const batches = getBatches();
+        batchSel.innerHTML = `<option value="all">All Batches</option>` + batches.map(b => `<option value="${escapeHtml(b)}">${escapeHtml(b)}</option>`).join('');
+        batchSel.value = batches.includes(currentBatchVal) ? currentBatchVal : 'all';
+
+        const filtered = state.students.filter(s => {
+          const matchesSearch = !search ||
+            s.name.toLowerCase().includes(search) ||
+            s.email.toLowerCase().includes(search) ||
+            s.phone.toLowerCase().includes(search) ||
+            s.batch.toLowerCase().includes(search);
+          const matchesBatch = batchFilter === 'all' || s.batch === batchFilter;
+          const matchesFee = feeFilter === 'all' || s.feeStatus === feeFilter;
+          return matchesSearch && matchesBatch && matchesFee;
+        });
+
+        const tbody = document.getElementById('students-table-body');
+        if (!filtered.length) {
+          tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-slate-500 text-sm">No matching students found.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = filtered.map(s => {
+          const att = getStudentAttendanceRate(s.id);
+          return `
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="py-3 px-4">
+                <div class="font-semibold text-slate-900">${escapeHtml(s.name)}</div>
+                <div class="text-xs text-slate-500">${escapeHtml(s.notes || 'No notes')}</div>
+              </td>
+              <td class="py-3 px-4 text-slate-700">${escapeHtml(s.batch)}</td>
+              <td class="py-3 px-4">
+                <div class="text-xs text-slate-800">${escapeHtml(s.email)}</div>
+                <div class="text-xs text-slate-500">${escapeHtml(s.phone)}</div>
+              </td>
+              <td class="py-3 px-4">
+                <span class="text-xs font-semibold text-slate-800">${att.pct}%</span>
+                <span class="text-xs text-slate-500">(${att.present}/${att.total})</span>
+              </td>
+              <td class="py-3 px-4">
+                ${statusBadge(s.feeStatus)}
+                <div class="text-[11px] text-slate-500 mt-0.5">${formatCurrency(s.paidAmount)} / ${formatCurrency(s.monthlyFee)}</div>
+              </td>
+              <td class="py-3 px-4 text-right whitespace-nowrap space-x-1">
+                <button data-pay-student="${s.id}" class="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-xs font-medium">Fee</button>
+                <button data-edit-student="${s.id}" class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-medium">Edit</button>
+                <button data-delete-student="${s.id}" class="px-2.5 py-1 rounded-md bg-rose-50 text-rose-600 hover:bg-rose-100 text-xs font-medium">Delete</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      function renderClasses() {
+        const sidebar = document.getElementById('sessions-sidebar');
+        const detail = document.getElementById('session-detail-panel');
+
+        if (!state.sessions.length) {
+          sidebar.innerHTML = `<div class="bg-white rounded-xl border border-slate-200 p-4 text-xs text-slate-500">No sessions created yet.</div>`;
+          detail.innerHTML = `<div class="text-center py-12 text-slate-500 text-sm">Create a class session to generate automated Google Meet attendance links.</div>`;
+          return;
+        }
+
+        if (!state.sessions.some(s => s.id === selectedSessionId)) {
+          selectedSessionId = state.sessions[0].id;
+        }
+
+        sidebar.innerHTML = state.sessions.map(ses => {
+          const active = ses.id === selectedSessionId;
+          const batchStudents = state.students.filter(s => s.batch === ses.batch);
+          const presentCount = state.attendance.filter(a => a.sessionId === ses.id && a.status === 'Present').length;
+          return `
+            <div data-select-session="${ses.id}" class="cursor-pointer rounded-xl border p-4 transition ${active ? 'bg-indigo-50/70 border-indigo-400 shadow-sm' : 'bg-white border-slate-200 hover:border-slate-300'}">
+              <div class="flex items-start justify-between gap-2">
+                <div class="font-semibold text-sm text-slate-900">${escapeHtml(ses.title)}</div>
+                <button data-delete-session="${ses.id}" title="Delete session" class="text-slate-400 hover:text-rose-600 p-0.5">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <div class="text-xs text-slate-600 mt-1">${escapeHtml(ses.batch)} &bull; ${escapeHtml(ses.datetime.replace('T', ' '))}</div>
+              <div class="mt-2 flex items-center justify-between text-xs">
+                <span class="text-emerald-700 font-medium">${presentCount}/${batchStudents.length} Joined</span>
+                <span class="text-indigo-600 font-medium">View Links &rarr;</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        const ses = state.sessions.find(s => s.id === selectedSessionId);
+        const enrolled = state.students.filter(s => s.batch === ses.batch);
+
+        detail.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200">
+            <div>
+              <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 mb-1">${escapeHtml(ses.batch)}</span>
+              <h3 class="text-lg font-bold text-slate-900">${escapeHtml(ses.title)}</h3>
+              <p class="text-xs text-slate-500 mt-0.5">Scheduled: ${escapeHtml(ses.datetime.replace('T', ' '))} &bull; Meet: <a href="${escapeHtml(ses.meetUrl)}" target="_blank" rel="noopener noreferrer" class="text-indigo-600 underline">${escapeHtml(ses.meetUrl)}</a></p>
+            </div>
+            <button id="btn-copy-all-invites" type="button" class="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium transition">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy All Invites
+            </button>
+          </div>
+
+          <div class="mt-4 space-y-3">
+            <div class="text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-lg p-3">
+              <strong>How automated attendance works:</strong> Share each student's unique link below via WhatsApp or Email. When they click it, their attendance is marked <strong>Present</strong> with a timestamp and they are directed to Google Meet. Use <strong>Test Click</strong> to preview this live.
+            </div>
+            ${enrolled.length === 0 ? `<p class="text-sm text-slate-500 py-4">No students registered in batch "${escapeHtml(ses.batch)}".</p>` : enrolled.map(stu => {
+              const joinUrl = getTrackableJoinUrl(ses.id, stu.id);
+              const attRec = state.attendance.find(a => a.sessionId === ses.id && a.studentId === stu.id);
+              const status = attRec ? attRec.status : 'Not Joined';
+              const inviteMsg = `Hi ${stu.name}, join your online class "${ses.title}" (${ses.datetime.replace('T', ' ')}) using your personal attendance link: ${joinUrl}`;
+              const waPhone = stu.phone.replace(/[^0-9]/g, '');
+              const waUrl = `https://wa.me/${waPhone}?text=${encodeURIComponent(inviteMsg)}`;
+              const mailUrl = `mailto:${encodeURIComponent(stu.email)}?subject=${encodeURIComponent('Online Class Link: ' + ses.title)}&body=${encodeURIComponent(inviteMsg)}`;
+
+              return `
+                <div class="p-3.5 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-2">
+                      <span class="font-semibold text-sm text-slate-900">${escapeHtml(stu.name)}</span>
+                      ${status === 'Present' ? statusBadge('Present') : `<span class="text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">${escapeHtml(status)}</span>`}
+                    </div>
+                    <div class="text-xs text-slate-500 truncate mt-0.5 font-mono">${escapeHtml(joinUrl)}</div>
+                  </div>
+                  <div class="flex flex-wrap items-center gap-1.5 shrink-0">
+                    <button data-simulate-join="${ses.id}|${stu.id}" type="button" class="px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium inline-flex items-center gap-1">
+                      <i data-lucide="mouse-pointer-click" class="w-3.5 h-3.5"></i> Test Click
+                    </button>
+                    <button data-copy-invite="${escapeHtml(inviteMsg)}" type="button" class="px-2.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-medium inline-flex items-center gap-1">
+                      <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy
+                    </button>
+                    <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-xs font-medium inline-flex items-center gap-1">
+                      WhatsApp
+                    </a>
+                    <a href="${mailUrl}" class="px-2.5 py-1.5 rounded-lg bg-sky-50 text-sky-700 hover:bg-sky-100 text-xs font-medium inline-flex items-center gap-1">
+                      Email
+                    </a>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+
+        const copyAllBtn = document.getElementById('btn-copy-all-invites');
+        if (copyAllBtn) {
+          copyAllBtn.addEventListener('click', () => {
+            const allText = enrolled.map(stu => {
+              const url = getTrackableJoinUrl(ses.id, stu.id);
+              return `${stu.name}: ${url}`;
+            }).join('\n');
+            copyText(allText || 'No students in batch.', 'Copied all personalized links!');
+          });
+        }
+      }
+
+      function renderAttendance() {
+        const sel = document.getElementById('attendance-session-select');
+        const prevVal = sel.value;
+        sel.innerHTML = state.sessions.map(s => `<option value="${s.id}">${escapeHtml(s.title)} (${escapeHtml(s.batch)})</option>`).join('');
+        if (state.sessions.some(s => s.id === prevVal)) sel.value = prevVal;
+
+        const sesId = sel.value || state.sessions[0]?.id;
+        const ses = state.sessions.find(s => s.id === sesId);
+        const tbody = document.getElementById('attendance-table-body');
+
+        if (!ses) {
+          tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-500 text-sm">No sessions available.</td></tr>`;
+          return;
+        }
+
+        const enrolled = state.students.filter(s => s.batch === ses.batch);
+        if (!enrolled.length) {
+          tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-500 text-sm">No students in ${escapeHtml(ses.batch)}.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = enrolled.map(stu => {
+          const rec = state.attendance.find(a => a.sessionId === ses.id && a.studentId === stu.id);
+          const status = rec ? rec.status : 'Absent';
+          const source = rec ? `${rec.source} (${rec.timestamp})` : 'Not recorded';
+          return `
+            <tr class="hover:bg-slate-50/80">
+              <td class="py-3 px-4 font-semibold text-slate-900">${escapeHtml(stu.name)}</td>
+              <td class="py-3 px-4 text-slate-600">${escapeHtml(stu.batch)}</td>
+              <td class="py-3 px-4">${statusBadge(status)}</td>
+              <td class="py-3 px-4 text-xs text-slate-500">${escapeHtml(source)}</td>
+              <td class="py-3 px-4 text-right space-x-1 whitespace-nowrap">
+                <button data-mark-att="${ses.id}|${stu.id}|Present" class="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-xs font-medium">Present</button>
+                <button data-mark-att="${ses.id}|${stu.id}|Late" class="px-2.5 py-1 rounded-md bg-amber-50 text-amber-700 hover:bg-amber-100 text-xs font-medium">Late</button>
+                <button data-mark-att="${ses.id}|${stu.id}|Absent" class="px-2.5 py-1 rounded-md bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-medium">Absent</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      function renderFees() {
+        const expected = state.students.reduce((sum, s) => sum + Number(s.monthlyFee || 0), 0);
+        const collected = state.students.reduce((sum, s) => sum + Number(s.paidAmount || 0), 0);
+        const balance = Math.max(0, expected - collected);
+
+        document.getElementById('fee-summary-cards').innerHTML = `
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="text-xs font-medium text-slate-500">Total Expected Fees</div>
+            <div class="text-xl font-bold text-slate-900 mt-1">${formatCurrency(expected)}</div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="text-xs font-medium text-slate-500">Total Collected</div>
+            <div class="text-xl font-bold text-emerald-600 mt-1">${formatCurrency(collected)}</div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="text-xs font-medium text-slate-500">Outstanding Balance</div>
+            <div class="text-xl font-bold text-rose-600 mt-1">${formatCurrency(balance)}</div>
+          </div>
+        `;
+
+        const tbody = document.getElementById('fees-table-body');
+        tbody.innerHTML = state.students.map(s => {
+          const bal = Math.max(0, Number(s.monthlyFee) - Number(s.paidAmount));
+          return `
+            <tr class="hover:bg-slate-50/80">
+              <td class="py-3 px-4">
+                <div class="font-semibold text-slate-900">${escapeHtml(s.name)}</div>
+                <div class="text-xs text-slate-500">${escapeHtml(s.batch)}</div>
+              </td>
+              <td class="py-3 px-4">${formatCurrency(s.monthlyFee)}</td>
+              <td class="py-3 px-4 font-medium text-emerald-700">${formatCurrency(s.paidAmount)}</td>
+              <td class="py-3 px-4 font-medium ${bal > 0 ? 'text-rose-600' : 'text-slate-500'}">${formatCurrency(bal)}</td>
+              <td class="py-3 px-4">${statusBadge(s.feeStatus)}</td>
+              <td class="py-3 px-4 text-xs text-slate-500">${escapeHtml(s.lastPaymentDate || '—')}</td>
+              <td class="py-3 px-4 text-right whitespace-nowrap space-x-1">
+                <button data-pay-student="${s.id}" class="px-2.5 py-1 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 text-xs font-medium">Update Fee</button>
+                <button data-receipt-student="${s.id}" class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-medium">Receipt</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        const histEl = document.getElementById('payment-history-list');
+        if (!state.payments.length) {
+          histEl.innerHTML = `<p class="text-xs text-slate-500 py-2">No transactions recorded yet.</p>`;
+        } else {
+          histEl.innerHTML = [...state.payments].reverse().map(p => {
+            const stu = state.students.find(s => s.id === p.studentId);
+            return `
+              <div class="py-2.5 flex items-center justify-between gap-3">
+                <div>
+                  <div class="font-medium text-slate-900">${escapeHtml(stu ? stu.name : 'Unknown Student')} &bull; <span class="text-emerald-600 font-semibold">${formatCurrency(p.amount)}</span></div>
+                  <div class="text-xs text-slate-500">${escapeHtml(p.date)} &bull; ${escapeHtml(p.method)} ${p.ref ? '• Ref: ' + escapeHtml(p.ref) : ''} ${p.notes ? '• ' + escapeHtml(p.notes) : ''}</div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      function renderAll() {
+        updateCloudBadge();
+        renderDashboard();
+        renderStudents();
+        renderClasses();
+        renderAttendance();
+        renderFees();
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      }
+
+      function openModal(id) {
+        document.getElementById(id).classList.remove('hidden');
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      }
+
+      function closeModal(id) {
+        document.getElementById(id).classList.add('hidden');
+      }
+
+      function openStudentModal(student = null) {
+        document.getElementById('modal-student-title').textContent = student ? 'Edit Student' : 'Register New Student';
+        document.getElementById('student-id').value = student ? student.id : '';
+        document.getElementById('student-name').value = student ? student.name : '';
+        document.getElementById('student-batch').value = student ? student.batch : '';
+        document.getElementById('student-email').value = student ? student.email : '';
+        document.getElementById('student-phone').value = student ? student.phone : '';
+        document.getElementById('student-fee-amount').value = student ? student.monthlyFee : '1500';
+        document.getElementById('student-fee-due').value = student ? student.dueDate : new Date().toISOString().slice(0, 10);
+        document.getElementById('student-notes').value = student ? student.notes : '';
+        openModal('modal-student');
+      }
+
+      function openPaymentModal(preselectStudentId = null) {
+        const sel = document.getElementById('payment-student-id');
+        sel.innerHTML = state.students.map(s => `<option value="${s.id}">${escapeHtml(s.name)} (${escapeHtml(s.batch)})</option>`).join('');
+        if (preselectStudentId) sel.value = preselectStudentId;
+        const stu = state.students.find(s => s.id === sel.value);
+        const bal = stu ? Math.max(0, Number(stu.monthlyFee) - Number(stu.paidAmount)) : 0;
+        document.getElementById('payment-amount').value = bal > 0 ? bal : (stu ? stu.monthlyFee : 0);
+        document.getElementById('payment-date').value = new Date().toISOString().slice(0, 10);
+        document.getElementById('payment-ref').value = '';
+        document.getElementById('payment-notes').value = '';
+        document.getElementById('payment-status').value = 'Paid';
+        openModal('modal-payment');
+      }
+
+      function openReceiptModal(studentId) {
+        const stu = state.students.find(s => s.id === studentId);
+        if (!stu) return;
+        const bal = Math.max(0, Number(stu.monthlyFee) - Number(stu.paidAmount));
+        const stuPayments = state.payments.filter(p => p.studentId === stu.id);
+        const lastPay = stuPayments[stuPayments.length - 1];
+        document.getElementById('receipt-content').innerHTML = `
+          <div class="text-center border-b border-slate-200 pb-4">
+            <h3 class="text-lg font-bold text-slate-900">ClassPulse Fee Receipt</h3>
+            <p class="text-xs text-slate-500">Generated on ${new Date().toLocaleDateString('en-IN')}</p>
+          </div>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between"><span class="text-slate-500">Student Name:</span><span class="font-semibold text-slate-900">${escapeHtml(stu.name)}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Batch:</span><span class="font-medium text-slate-800">${escapeHtml(stu.batch)}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Monthly Fee:</span><span>${formatCurrency(stu.monthlyFee)}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Total Paid:</span><span class="font-semibold text-emerald-600">${formatCurrency(stu.paidAmount)}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Balance Due:</span><span class="font-semibold text-rose-600">${formatCurrency(bal)}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Status:</span><span>${statusBadge(stu.feeStatus)}</span></div>
+            ${lastPay ? `<div class="flex justify-between"><span class="text-slate-500">Last Method / Ref:</span><span class="text-xs font-medium">${escapeHtml(lastPay.method)} ${lastPay.ref ? '(' + escapeHtml(lastPay.ref) + ')' : ''}</span></div>` : ''}
+          </div>
+        `;
+        openModal('modal-receipt');
+      }
+
+      // Event Listeners
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+      });
+
+      document.getElementById('btn-mobile-menu').addEventListener('click', () => {
+        document.getElementById('mobile-nav').classList.toggle('hidden');
+      });
+
+      document.getElementById('btn-goto-classes').addEventListener('click', () => switchTab('classes'));
+      document.getElementById('btn-quick-add-student').addEventListener('click', () => openStudentModal());
+      document.getElementById('btn-open-student-modal').addEventListener('click', () => openStudentModal());
+      document.getElementById('btn-open-payment-modal').addEventListener('click', () => openPaymentModal());
+
+      document.getElementById('btn-open-cloud-modal').addEventListener('click', () => {
+        document.getElementById('cloud-supabase-url').value = cloudConfig.supabaseUrl || '';
+        document.getElementById('cloud-supabase-key').value = cloudConfig.supabaseAnonKey || '';
+        document.getElementById('cloud-teacher-pin').value = cloudConfig.teacherPin || '1234';
+        openModal('modal-cloud');
+      });
+
+      document.getElementById('btn-copy-sql').addEventListener('click', () => {
+        copyText(document.getElementById('supabase-sql-block').textContent, 'SQL script copied!');
+      });
+
+      document.getElementById('form-cloud-config').addEventListener('submit', async e => {
+        e.preventDefault();
+        const url = document.getElementById('cloud-supabase-url').value.trim();
+        const key = document.getElementById('cloud-supabase-key').value.trim();
+        const pin = document.getElementById('cloud-teacher-pin').value.trim() || '1234';
+        saveCloudConfig({ supabaseUrl: url, supabaseAnonKey: key, teacherPin: pin });
+        try {
+          await sbFetch('students?select=id&limit=1');
+          showToast('Connected to Supabase Cloud!');
+          await syncFromCloud();
+        } catch (err) {
+          showToast('Connection failed: ' + err.message, 'error');
+        }
+        renderAll();
+      });
+
+      document.getElementById('btn-push-local-to-cloud').addEventListener('click', async () => {
+        if (!isCloudEnabled()) {
+          showToast('Please save your Supabase URL and Key first.', 'error');
+          return;
+        }
+        try {
+          for (const s of state.students) await upsertStudentCloud(s);
+          for (const ses of state.sessions) await upsertSessionCloud(ses);
+          for (const att of state.attendance) await upsertAttendanceCloud(att);
+          for (const p of state.payments) await insertPaymentCloud(p);
+          showToast('All local data uploaded to Supabase Cloud!');
+        } catch (err) {
+          showToast('Upload error: ' + err.message, 'error');
+        }
+      });
+
+      document.getElementById('btn-download-live-html').addEventListener('click', () => {
+        const url = document.getElementById('cloud-supabase-url').value.trim();
+        const key = document.getElementById('cloud-supabase-key').value.trim();
+        const pin = document.getElementById('cloud-teacher-pin').value.trim() || '1234';
+        if (!url || !key) {
+          showToast('Enter your Supabase URL and Anon Key first.', 'error');
+          return;
+        }
+        saveCloudConfig({ supabaseUrl: url, supabaseAnonKey: key, teacherPin: pin });
+        const rawHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+        const cfgRegex = /\/\/ \/\*CLOUD_CONFIG_START\*\/[\s\S]*?\/\/ \/\*CLOUD_CONFIG_END\*\//;
+        const replacement = `// /*CLOUD_CONFIG_START*/\n      const EMBEDDED_CLOUD_CONFIG = ${JSON.stringify({ supabaseUrl: url, supabaseAnonKey: key, teacherPin: pin }, null, 8).replace(/\n}$/, '\n      }')};\n      // /*CLOUD_CONFIG_END*/`;
+        const liveHtml = rawHtml.replace(cfgRegex, replacement);
+        const blob = new Blob([liveHtml], { type: 'text/html' });
+        const dlUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = dlUrl;
+        a.download = 'index.html';
+        a.click();
+        URL.revokeObjectURL(dlUrl);
+        showToast('Downloaded live index.html! Drag it onto Netlify Drop.');
+      });
+
+      document.getElementById('form-unlock-pin').addEventListener('submit', e => {
+        e.preventDefault();
+        const entered = document.getElementById('input-unlock-pin').value.trim();
+        if (entered === (cloudConfig.teacherPin || '1234')) {
+          document.getElementById('teacher-pin-overlay').classList.add('hidden');
+          document.getElementById('pin-error-msg').classList.add('hidden');
+          showToast('Dashboard unlocked!');
+        } else {
+          document.getElementById('pin-error-msg').classList.remove('hidden');
+        }
+      });
+
+      document.getElementById('btn-open-session-modal').addEventListener('click', () => {
+        const batchSel = document.getElementById('session-batch');
+        const batches = getBatches();
+        batchSel.innerHTML = batches.length
+          ? batches.map(b => `<option value="${escapeHtml(b)}">${escapeHtml(b)}</option>`).join('')
+          : `<option value="General Batch">General Batch</option>`;
+        document.getElementById('session-datetime').value = new Date().toISOString().slice(0, 16);
+        openModal('modal-session');
+      });
+
+      document.querySelectorAll('[data-close-modal]').forEach(btn => {
+        btn.addEventListener('click', () => closeModal(btn.dataset.closeModal));
+      });
+
+      document.getElementById('close-join-overlay').addEventListener('click', () => {
+        document.getElementById('student-join-overlay').classList.add('hidden');
+        if (window.location.hash.startsWith('#join=')) {
+          history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+      });
+
+      document.getElementById('btn-print-receipt').addEventListener('click', () => window.print());
+
+      document.getElementById('form-student').addEventListener('submit', async e => {
+        e.preventDefault();
+        const id = document.getElementById('student-id').value;
+        const payload = {
+          name: document.getElementById('student-name').value.trim(),
+          batch: document.getElementById('student-batch').value.trim(),
+          email: document.getElementById('student-email').value.trim(),
+          phone: document.getElementById('student-phone').value.trim(),
+          monthlyFee: Number(document.getElementById('student-fee-amount').value || 0),
+          dueDate: document.getElementById('student-fee-due').value,
+          notes: document.getElementById('student-notes').value.trim()
+        };
+        let savedStu;
+        if (id) {
+          const idx = state.students.findIndex(s => s.id === id);
+          if (idx !== -1) {
+            state.students[idx] = { ...state.students[idx], ...payload };
+            savedStu = state.students[idx];
+          }
+          showToast('Student profile updated!');
+        } else {
+          savedStu = {
+            id: 'stu_' + Date.now(),
+            ...payload,
+            paidAmount: 0,
+            feeStatus: payload.monthlyFee > 0 ? 'Pending' : 'Paid',
+            lastPaymentDate: ''
+          };
+          state.students.push(savedStu);
+          showToast('New student registered!');
+        }
+        saveState();
+        closeModal('modal-student');
+        renderAll();
+        if (savedStu) await upsertStudentCloud(savedStu);
+      });
+
+      document.getElementById('form-session').addEventListener('submit', async e => {
+        e.preventDefault();
+        const newSes = {
+          id: 'ses_' + Date.now(),
+          title: document.getElementById('session-title').value.trim(),
+          batch: document.getElementById('session-batch').value,
+          datetime: document.getElementById('session-datetime').value,
+          meetUrl: document.getElementById('session-meet-url').value.trim()
+        };
+        state.sessions.unshift(newSes);
+        selectedSessionId = newSes.id;
+        saveState();
+        closeModal('modal-session');
+        document.getElementById('form-session').reset();
+        renderAll();
+        showToast('Class session created with trackable Meet links!');
+        await upsertSessionCloud(newSes);
+      });
+
+      document.getElementById('form-payment').addEventListener('submit', async e => {
+        e.preventDefault();
+        const stuId = document.getElementById('payment-student-id').value;
+        const amount = Number(document.getElementById('payment-amount').value || 0);
+        const date = document.getElementById('payment-date').value;
+        const method = document.getElementById('payment-method').value;
+        const ref = document.getElementById('payment-ref').value.trim();
+        const status = document.getElementById('payment-status').value;
+        const notes = document.getElementById('payment-notes').value.trim();
+
+        const stu = state.students.find(s => s.id === stuId);
+        if (!stu) return;
+
+        stu.paidAmount = Number(stu.paidAmount || 0) + amount;
+        stu.feeStatus = status;
+        stu.lastPaymentDate = date;
+
+        const payRec = {
+          id: 'pay_' + Date.now(),
+          studentId: stuId,
+          amount,
+          date,
+          method,
+          ref,
+          notes
+        };
+        state.payments.push(payRec);
+
+        saveState();
+        closeModal('modal-payment');
+        renderAll();
+        showToast(`Payment of ${formatCurrency(amount)} recorded for ${stu.name}!`);
+        await upsertStudentCloud(stu);
+        await insertPaymentCloud(payRec);
+      });
+
+      document.getElementById('student-search').addEventListener('input', renderStudents);
+      document.getElementById('student-batch-filter').addEventListener('change', renderStudents);
+      document.getElementById('student-fee-filter').addEventListener('change', renderStudents);
+      document.getElementById('attendance-session-select').addEventListener('change', renderAttendance);
+
+      document.getElementById('btn-export-data').addEventListener('click', () => {
+        const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `classpulse-backup-${new Date().toISOString().slice(0, 10)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('Backup JSON downloaded!');
+      });
+
+      document.getElementById('input-import-data').addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+          try {
+            const parsed = JSON.parse(ev.target.result);
+            if (parsed && Array.isArray(parsed.students)) {
+              state = parsed;
+              saveState();
+              renderAll();
+              showToast('Backup restored successfully!');
+            } else {
+              showToast('Invalid backup file format.', 'error');
+            }
+          } catch (err) {
+            showToast('Could not parse JSON file.', 'error');
+          }
+        };
+        reader.readAsText(file);
+        e.target.value = '';
+      });
+
+      document.body.addEventListener('click', async e => {
+        const jump = e.target.closest('[data-jump]');
+        if (jump) { switchTab(jump.dataset.jump); return; }
+
+        const openSes = e.target.closest('[data-open-session]');
+        if (openSes) {
+          selectedSessionId = openSes.dataset.openSession;
+          switchTab('classes');
+          return;
+        }
+
+        const delSes = e.target.closest('[data-delete-session]');
+        if (delSes) {
+          e.stopPropagation();
+          const id = delSes.dataset.deleteSession;
+          state.sessions = state.sessions.filter(s => s.id !== id);
+          state.attendance = state.attendance.filter(a => a.sessionId !== id);
+          saveState();
+          renderAll();
+          showToast('Session removed.', 'info');
+          await deleteSessionCloud(id);
+          return;
+        }
+
+        const selSes = e.target.closest('[data-select-session]');
+        if (selSes) {
+          selectedSessionId = selSes.dataset.selectSession;
+          renderClasses();
+          if (typeof lucide !== 'undefined') lucide.createIcons();
+          return;
+        }
+
+        const simJoin = e.target.closest('[data-simulate-join]');
+        if (simJoin) {
+          const [sesId, stuId] = simJoin.dataset.simulateJoin.split('|');
+          await markAttendanceByJoin(sesId, stuId, true);
+          return;
+        }
+
+        const copyInv = e.target.closest('[data-copy-invite]');
+        if (copyInv) {
+          copyText(copyInv.dataset.copyInvite, 'Invite message copied!');
+          return;
+        }
+
+        const markAtt = e.target.closest('[data-mark-att]');
+        if (markAtt) {
+          const [sesId, stuId, status] = markAtt.dataset.markAtt.split('|');
+          const ts = new Date().toISOString().slice(0, 16).replace('T', ' ');
+          const rec = { sessionId: sesId, studentId: stuId, status, source: 'Manual', timestamp: ts };
+          const existing = state.attendance.find(a => a.sessionId === sesId && a.studentId === stuId);
+          if (existing) {
+            existing.status = status;
+            existing.source = 'Manual';
+            existing.timestamp = ts;
+          } else {
+            state.attendance.push(rec);
+          }
+          saveState();
+          renderAll();
+          showToast(`Attendance marked as ${status}.`);
+          await upsertAttendanceCloud(rec);
+          return;
+        }
+
+        const editStu = e.target.closest('[data-edit-student]');
+        if (editStu) {
+          const stu = state.students.find(s => s.id === editStu.dataset.editStudent);
+          if (stu) openStudentModal(stu);
+          return;
+        }
+
+        const delStu = e.target.closest('[data-delete-student]');
+        if (delStu) {
+          const id = delStu.dataset.deleteStudent;
+          state.students = state.students.filter(s => s.id !== id);
+          state.attendance = state.attendance.filter(a => a.studentId !== id);
+          saveState();
+          renderAll();
+          showToast('Student deleted.', 'info');
+          await deleteStudentCloud(id);
+          return;
+        }
+
+        const payStu = e.target.closest('[data-pay-student]');
+        if (payStu) {
+          openPaymentModal(payStu.dataset.payStudent);
+          return;
+        }
+
+        const recStu = e.target.closest('[data-receipt-student]');
+        if (recStu) {
+          openReceiptModal(recStu.dataset.receiptStudent);
+          return;
+        }
+      });
+
+      window.addEventListener('hashchange', checkHashJoin);
+
+      async function init() {
+        renderAll();
+        const isJoinLink = window.location.hash.startsWith('#join=');
+        if (isCloudEnabled()) {
+          await syncFromCloud();
+        }
+        if (isJoinLink) {
+          await checkHashJoin();
+        } else if (EMBEDDED_CLOUD_CONFIG.supabaseUrl && EMBEDDED_CLOUD_CONFIG.supabaseAnonKey) {
+          document.getElementById('teacher-pin-overlay').classList.remove('hidden');
+          if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+      }
+
+      init();
+    })();
+  </script>
+
+
+<script async="" src="/.netlify/scripts/ar" data-netlify-deploy-id="6b0839ed39fccfb40c1b48c9" data-netlify-site-id="8a506717-7a6f-4ef5-a896-a711917cd2e3" data-agent-runner-id=""></script>
+<script async="" src="/.netlify/scripts/hud?variant=owner-private" data-nf-variant="owner-private" data-netlify-site-id="8a506717-7a6f-4ef5-a896-a711917cd2e3" data-app-host="app.netlify.com"></script>
+</body></html>
