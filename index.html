@@ -2039,7 +2039,7 @@ alter table payments disable row level security;</pre>
         if (isJoinLink) {
           await checkHashJoin();
         } else if (EMBEDDED_CLOUD_CONFIG.supabaseUrl && EMBEDDED_CLOUD_CONFIG.supabaseAnonKey) {
-          document.getElementById('teacher-pin-overlay').classList.remove('hidden');
+          document.getElementById('teacher-pin-overlay').classList.add('hidden');
           if (typeof lucide !== 'undefined') lucide.createIcons();
         }
       }
