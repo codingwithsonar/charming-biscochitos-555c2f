@@ -43,7 +43,7 @@
   <!-- Toast Container -->
   <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
 
-  <!-- Teacher PIN Lock Overlay (Active in Live Cloud Mode or when locked) -->
+  <!-- Teacher PIN Lock Overlay -->
   <div id="teacher-pin-overlay" class="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 sm:p-8 border border-slate-200 text-center">
       <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center mx-auto mb-4">
@@ -125,7 +125,7 @@
       </nav>
 
       <div class="flex items-center gap-2">
-        <button id="btn-open-cloud-modal" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-xs font-semibold transition whitespace-nowrap">
+        <button id="btn-open-cloud-modal" type="button" class="hidden items-center gap-1.5 px-3 py-2 rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-xs font-semibold transition whitespace-nowrap">
           <i data-lucide="cloud" class="w-3.5 h-3.5"></i>
           <span class="hidden sm:inline">Go Live</span>
         </button>
@@ -372,9 +372,9 @@
 
   </main>
 
-  <!-- MODAL: Cloud Setup / Go Live -->
+  <!-- MODAL: Cloud Setup / Go Live (Hidden by default) -->
   <div id="modal-cloud" class="hidden fixed inset-0 z-40 modal-backdrop flex items-center justify-center p-4">
-    <div style='display' none; !important' class="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-6 border border-slate-200 max-h-[90vh] overflow-y-auto space-y-5">
+    <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-6 border border-slate-200 max-h-[90vh] overflow-y-auto space-y-5">
       <div class="flex items-center justify-between">
         <div>
           <h3 class="text-lg font-bold text-slate-900">Go Live with Free Supabase Cloud</h3>
@@ -1119,7 +1119,7 @@ alter table payments disable row level security;</pre>
         } else {
           badge.textContent = 'Local Demo';
           badge.className = 'hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200';
-          bannerText.innerHTML = 'Create a class session in <strong>Meet Links</strong> to generate personalized student join URLs. Click <strong>Go Live</strong> in the header to connect your free Supabase database and publish online.';
+          bannerText.innerHTML = 'Create a class session in <strong>Meet Links</strong> to generate personalized student join URLs.';
         }
       }
 
@@ -2038,8 +2038,9 @@ alter table payments disable row level security;</pre>
         }
         if (isJoinLink) {
           await checkHashJoin();
-        } else if (EMBEDDED_CLOUD_CONFIG.supabaseUrl && EMBEDDED_CLOUD_CONFIG.supabaseAnonKey) {
+        } else {
           document.getElementById('teacher-pin-overlay').classList.add('hidden');
+          document.getElementById('modal-cloud').classList.add('hidden');
           if (typeof lucide !== 'undefined') lucide.createIcons();
         }
       }
