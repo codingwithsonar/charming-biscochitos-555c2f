@@ -43,7 +43,7 @@
   <!-- Toast Container -->
   <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
 
-  <!-- Portal Login Overlay (Student Login + Teacher Login) -->
+  <!-- Portal Login Overlay (Student Login + Teacher Login + Forgot/Reset Password) -->
   <div id="teacher-pin-overlay" class="hidden fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 border border-slate-200">
       <div class="text-center mb-5">
@@ -51,10 +51,10 @@
           <i data-lucide="graduation-cap" class="w-6 h-6"></i>
         </div>
         <h2 class="text-xl font-bold text-slate-900">ClassPulse Portal</h2>
-        <p class="text-xs text-slate-500 mt-1">Sign in as a Student or Teacher</p>
+        <p class="text-xs text-slate-500 mt-1">Sign in with your User ID &amp; Password</p>
       </div>
 
-      <div class="grid grid-cols-2 gap-1.5 p-1 bg-slate-100 rounded-xl mb-5">
+      <div id="login-role-tabs" class="grid grid-cols-2 gap-1.5 p-1 bg-slate-100 rounded-xl mb-5">
         <button id="login-tab-student" type="button" class="py-2 rounded-lg text-xs font-semibold bg-white text-indigo-700 shadow-sm transition">Student Login</button>
         <button id="login-tab-teacher" type="button" class="py-2 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition">Teacher Login</button>
       </div>
@@ -62,25 +62,87 @@
       <!-- Student Login Form -->
       <form id="form-student-login" class="space-y-3">
         <div>
-          <label class="block text-xs font-medium text-slate-700 mb-1">Registered Email or Phone Number</label>
-          <input id="input-student-identifier" type="text" required placeholder="e.g. aarav@example.com or 9876543210" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          <label class="block text-xs font-medium text-slate-700 mb-1">Student User ID (Email or Phone)</label>
+          <input id="input-student-identifier" type="text" required placeholder="e.g. aarav.sharma@example.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
         </div>
-        <p id="student-login-error" class="hidden text-xs text-rose-600 font-medium">No student found with that email or phone number.</p>
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-medium text-slate-700">Password</label>
+            <button id="btn-forgot-student" type="button" class="text-xs font-medium text-indigo-600 hover:text-indigo-700">Forgot Password?</button>
+          </div>
+          <input id="input-student-password" type="password" required placeholder="Enter your password" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+        <p id="student-login-error" class="hidden text-xs text-rose-600 font-medium">Invalid Student User ID or Password.</p>
         <button type="submit" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition">
-          Open My Student Portal
+          Sign In as Student
         </button>
+      </form>
+
+      <!-- Student Forgot / Reset Password Form -->
+      <form id="form-student-reset" class="hidden space-y-3">
+        <div class="text-xs font-semibold text-slate-800 bg-slate-50 border border-slate-200 rounded-lg p-2.5">
+          Reset Student Password — verify your registered Email &amp; Phone
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">Registered Email *</label>
+          <input id="reset-stu-email" type="email" required placeholder="student@example.com" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">Registered Phone Number *</label>
+          <input id="reset-stu-phone" type="tel" required placeholder="9876543210" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">New Password *</label>
+          <input id="reset-stu-newpass" type="password" minlength="4" required placeholder="Enter new password" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+        <p id="reset-stu-error" class="hidden text-xs text-rose-600 font-medium">Email and Phone do not match any registered student.</p>
+        <div class="flex gap-2 pt-1">
+          <button id="btn-back-student-login" type="button" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-semibold text-xs hover:bg-slate-50">Back</button>
+          <button type="submit" class="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs">Reset Password</button>
+        </div>
       </form>
 
       <!-- Teacher Login Form -->
       <form id="form-unlock-pin" class="hidden space-y-3">
         <div>
-          <label class="block text-xs font-medium text-slate-700 mb-1">Teacher Dashboard PIN</label>
-          <input id="input-unlock-pin" type="password" inputmode="numeric" required placeholder="Enter Teacher PIN" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-center text-lg tracking-widest focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          <label class="block text-xs font-medium text-slate-700 mb-1">Teacher User ID</label>
+          <input id="input-teacher-userid" type="text" required placeholder="teacher@example.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
         </div>
-        <p id="pin-error-msg" class="hidden text-xs text-rose-600 font-medium">Incorrect PIN. Please try again.</p>
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-medium text-slate-700">Password</label>
+            <button id="btn-forgot-teacher" type="button" class="text-xs font-medium text-indigo-600 hover:text-indigo-700">Forgot Password?</button>
+          </div>
+          <input id="input-unlock-pin" type="password" required placeholder="Enter Teacher Password" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+        <p id="pin-error-msg" class="hidden text-xs text-rose-600 font-medium">Incorrect User ID or Password. Please try again.</p>
         <button type="submit" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition">
-          Unlock Teacher Dashboard
+          Sign In as Teacher
         </button>
+      </form>
+
+      <!-- Teacher Forgot / Reset Password Form -->
+      <form id="form-teacher-reset" class="hidden space-y-3">
+        <div class="text-xs font-semibold text-slate-800 bg-slate-50 border border-slate-200 rounded-lg p-2.5">
+          Reset Teacher Password — enter your User ID and Supabase Project ID to verify
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">Teacher User ID *</label>
+          <input id="reset-tch-userid" type="text" required placeholder="teacher@example.com" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">Recovery Code (Supabase Project ID) *</label>
+          <input id="reset-tch-code" type="text" required placeholder="Enter your Recovery Code" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">New Password *</label>
+          <input id="reset-tch-newpass" type="password" minlength="6" required placeholder="Enter new password" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+        <p id="reset-tch-error" class="hidden text-xs text-rose-600 font-medium">Invalid User ID or Recovery Code.</p>
+        <div class="flex gap-2 pt-1">
+          <button id="btn-back-teacher-login" type="button" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-semibold text-xs hover:bg-slate-50">Back</button>
+          <button type="submit" class="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs">Reset Password</button>
+        </div>
       </form>
     </div>
   </div>
@@ -109,11 +171,38 @@
         <h3 class="text-sm font-bold text-slate-900 mb-3">My Class &amp; Google Meet Links</h3>
         <div id="sp-sessions-list" class="space-y-3"></div>
       </div>
-      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
-        <h3 class="text-sm font-bold text-slate-900 mb-3">My Attendance History</h3>
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">Day-by-Day Attendance History</h3>
+            <p class="text-xs text-slate-500">See which days you were Present, Late, or Absent.</p>
+          </div>
+          <div class="flex items-center gap-1.5" id="sp-att-filters">
+            <button data-sp-att-filter="all" type="button" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-600 text-white">All</button>
+            <button data-sp-att-filter="Present" type="button" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">Present</button>
+            <button data-sp-att-filter="Absent" type="button" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">Absent</button>
+          </div>
+        </div>
+        <div id="sp-att-summary-pills" class="flex flex-wrap gap-2"></div>
         <div id="sp-attendance-list" class="divide-y divide-slate-100 text-sm"></div>
       </div>
     </main>
+  <footer class="no-print mt-auto border-t border-slate-200/80 bg-white/80 backdrop-blur-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5">
+        <span class="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-600 to-violet-600 text-white flex items-center justify-center shadow-sm">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+        </span>
+        <p class="text-xs sm:text-sm text-slate-600">
+          This website is owned &amp; created by
+          <span class="font-bold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">Rohit Sonar</span>
+        </p>
+      </div>
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">
+        &copy; 2026 ClassPulse &bull; All Rights Reserved
+      </span>
+    </div>
+  </footer>
   </div>
 
   <!-- Student Join Portal Overlay (when #join= or simulated) -->
@@ -364,7 +453,8 @@
           <h2 class="text-lg font-bold text-slate-900">Attendance Register &amp; Click Logs</h2>
           <p class="text-xs text-slate-500">Review auto-marked link clicks or manually update attendance for any session.</p>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2">
+          <input id="attendance-date-input" type="date" class="px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           <select id="attendance-session-select" class="px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
         </div>
       </div>
@@ -385,6 +475,42 @@
           </table>
         </div>
       </div>
+
+      <!-- Student Day-by-Day Attendance History (Teacher View) -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">Student Day-by-Day Attendance Report</h3>
+            <p class="text-xs text-slate-500">Select a student to view which days they were Present, Late, or Absent.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <select id="teacher-student-att-select" class="px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
+            <select id="teacher-student-att-filter" class="px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="all">All Days</option>
+              <option value="Present">Present Days</option>
+              <option value="Absent">Absent Days</option>
+              <option value="Late">Late Days</option>
+            </select>
+            <button id="btn-export-stu-att" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i> Export CSV
+            </button>
+          </div>
+        </div>
+        <div id="teacher-student-att-pills" class="flex flex-wrap gap-2"></div>
+        <div class="overflow-x-auto border border-slate-200 rounded-xl">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                <th class="py-2.5 px-4">Date &amp; Day</th>
+                <th class="py-2.5 px-4">Class Session</th>
+                <th class="py-2.5 px-4">Status</th>
+                <th class="py-2.5 px-4">Check-in / Source</th>
+              </tr>
+            </thead>
+            <tbody id="teacher-student-att-body" class="divide-y divide-slate-100 text-sm"></tbody>
+          </table>
+        </div>
+      </div>
     </section>
 
     <!-- FEES TAB -->
@@ -394,9 +520,14 @@
           <h2 class="text-lg font-bold text-slate-900">Fee Management &amp; Payment Details</h2>
           <p class="text-xs text-slate-500">Record fee payments, update payment status, and generate printable receipts.</p>
         </div>
-        <button id="btn-open-payment-modal" type="button" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition">
-          <i data-lucide="plus-circle" class="w-4 h-4"></i> Record Fee Payment
-        </button>
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="btn-open-reset-fees-modal" type="button" class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs sm:text-sm font-medium transition">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset Transactions &amp; Balances
+          </button>
+          <button id="btn-open-payment-modal" type="button" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i> Record Fee Payment
+          </button>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="fee-summary-cards"></div>
@@ -427,6 +558,23 @@
     </section>
 
   </main>
+
+  <footer class="no-print mt-auto border-t border-slate-200/80 bg-white/80 backdrop-blur-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5">
+        <span class="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-600 to-violet-600 text-white flex items-center justify-center shadow-sm">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+        </span>
+        <p class="text-xs sm:text-sm text-slate-600">
+          This website is owned &amp; created by
+          <span class="font-bold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">Rohit Sonar</span>
+        </p>
+      </div>
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">
+        &copy; 2026 ClassPulse &bull; All Rights Reserved
+      </span>
+    </div>
+  </footer>
 
 
   <!-- MODAL: Register / Edit Student -->
@@ -470,9 +618,15 @@
             <input id="student-fee-due" type="date" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
         </div>
-        <div>
-          <label class="block text-xs font-medium text-slate-700 mb-1">Parent / Notes</label>
-          <input id="student-notes" type="text" placeholder="Optional parent name or notes" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Student Login Password *</label>
+            <input id="student-password" type="text" required placeholder="student123" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Parent / Notes</label>
+            <input id="student-notes" type="text" placeholder="Optional parent name or notes" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          </div>
         </div>
         <div class="flex justify-end gap-2 pt-2">
           <button type="button" data-close-modal="modal-student" class="px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50">Cancel</button>
@@ -578,6 +732,25 @@
     </div>
   </div>
 
+  <!-- MODAL: Confirm Reset Fees & Transactions -->
+  <div id="modal-reset-fees" class="hidden fixed inset-0 z-40 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-bold text-slate-900">Reset Transactions &amp; Balances?</h3>
+        <button type="button" data-close-modal="modal-reset-fees" class="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <p class="text-xs sm:text-sm text-slate-600">
+        This will clear all <strong>Recent Fee Transactions</strong> and reset every student's <strong>Outstanding Balance</strong> and <strong>Paid Amount</strong> to <strong>₹0</strong> (both locally and in Supabase).
+      </p>
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" data-close-modal="modal-reset-fees" class="px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50">Cancel</button>
+        <button id="btn-confirm-reset-fees" type="button" class="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold">Yes, Reset Now</button>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL: Fee Receipt -->
   <div id="modal-receipt" class="hidden fixed inset-0 z-40 modal-backdrop flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 border border-slate-200">
@@ -597,7 +770,8 @@
       const EMBEDDED_CLOUD_CONFIG = {
         supabaseUrl: 'https://kubexiybreiyysbtnrhr.supabase.co',
         supabaseAnonKey: 'sb_publishable_Q2LtcqIpuZtw-RiCZCwZXA_1s3eoaJa',
-        teacherPin: '9458'
+        teacherUserId: 'rohitsonar2708@gmail.com',
+        teacherPassword: 'Logmein@2708'
       };
       // /*CLOUD_CONFIG_END*/
 
@@ -612,11 +786,12 @@
             batch: 'Class 10 Math',
             email: 'aarav.sharma@example.com',
             phone: '+91 9876543210',
-            monthlyFee: 1800,
-            paidAmount: 1800,
+            monthlyFee: 0,
+            paidAmount: 0,
             feeStatus: 'Paid',
             dueDate: '2026-11-10',
             lastPaymentDate: '2026-11-05',
+            password: 'student123',
             notes: 'Parent: Rajesh Sharma'
           },
           {
@@ -625,11 +800,12 @@
             batch: 'Class 10 Math',
             email: 'priya.verma@example.com',
             phone: '+91 9823456789',
-            monthlyFee: 1800,
-            paidAmount: 1000,
-            feeStatus: 'Partial',
+            monthlyFee: 0,
+            paidAmount: 0,
+            feeStatus: 'Paid',
             dueDate: '2026-11-15',
             lastPaymentDate: '2026-11-12',
+            password: 'student123',
             notes: 'Balance ₹800 promised by Friday'
           },
           {
@@ -638,11 +814,12 @@
             batch: 'Class 10 Math',
             email: 'rohan.das@example.com',
             phone: '+91 9911223344',
-            monthlyFee: 1800,
+            monthlyFee: 0,
             paidAmount: 0,
-            feeStatus: 'Pending',
+            feeStatus: 'Paid',
             dueDate: '2026-11-28',
             lastPaymentDate: '',
+            password: 'student123',
             notes: ''
           },
           {
@@ -651,11 +828,12 @@
             batch: 'Class 12 Physics',
             email: 'ananya.gupta@example.com',
             phone: '+91 9811223355',
-            monthlyFee: 2400,
-            paidAmount: 2400,
+            monthlyFee: 0,
+            paidAmount: 0,
             feeStatus: 'Paid',
             dueDate: '2026-11-10',
             lastPaymentDate: '2026-11-08',
+            password: 'student123',
             notes: 'Regular topper'
           },
           {
@@ -664,11 +842,12 @@
             batch: 'Class 12 Physics',
             email: 'kabir.khan@example.com',
             phone: '+91 9765432109',
-            monthlyFee: 2400,
+            monthlyFee: 0,
             paidAmount: 0,
-            feeStatus: 'Overdue',
+            feeStatus: 'Paid',
             dueDate: '2026-11-05',
             lastPaymentDate: '',
+            password: 'student123',
             notes: 'Reminder sent on WhatsApp'
           }
         ],
@@ -694,11 +873,7 @@
           { sessionId: 'ses_1', studentId: 'stu_3', status: 'Absent', source: 'Manual', timestamp: '2026-11-26 19:10' },
           { sessionId: 'ses_2', studentId: 'stu_4', status: 'Present', source: 'Meet Link Click', timestamp: '2026-11-26 17:29' }
         ],
-        payments: [
-          { id: 'pay_1', studentId: 'stu_1', amount: 1800, date: '2026-11-05', method: 'UPI', ref: 'UPI-904128', notes: 'November Fee' },
-          { id: 'pay_2', studentId: 'stu_4', amount: 2400, date: '2026-11-08', method: 'Bank Transfer', ref: 'IMPS-339102', notes: 'November Fee' },
-          { id: 'pay_3', studentId: 'stu_2', amount: 1000, date: '2026-11-12', method: 'UPI', ref: 'UPI-772190', notes: 'Partial Nov Fee' }
-        ]
+        payments: []
       };
 
       let cloudConfig = loadCloudConfig();
@@ -709,17 +884,17 @@
       let feeChart = null;
 
       function loadCloudConfig() {
-        if (EMBEDDED_CLOUD_CONFIG.supabaseUrl && EMBEDDED_CLOUD_CONFIG.supabaseAnonKey) {
-          return { ...EMBEDDED_CLOUD_CONFIG };
-        }
+        let base = { ...EMBEDDED_CLOUD_CONFIG };
         try {
           const raw = localStorage.getItem(CLOUD_STORAGE_KEY);
           if (raw) {
             const parsed = JSON.parse(raw);
-            if (parsed && parsed.supabaseUrl) return parsed;
+            if (parsed && parsed.teacherPassword) {
+              base.teacherPassword = parsed.teacherPassword;
+            }
           }
         } catch (e) {}
-        return { ...EMBEDDED_CLOUD_CONFIG };
+        return base;
       }
 
       function saveCloudConfig(cfg) {
@@ -789,6 +964,7 @@
             feeStatus: r.fee_status || 'Pending',
             dueDate: r.due_date || '',
             lastPaymentDate: r.last_payment_date || '',
+            password: r.password || 'student123',
             notes: r.notes || ''
           }));
           state.sessions = (sessions || []).map(r => ({
@@ -801,6 +977,7 @@
           state.attendance = (attendance || []).map(r => ({
             sessionId: r.session_id,
             studentId: r.student_id,
+            date: (r.timestamp || '').slice(0, 10),
             status: r.status,
             source: r.source || 'Manual',
             timestamp: r.timestamp || ''
@@ -824,25 +1001,38 @@
 
       async function upsertStudentCloud(s) {
         if (!isCloudEnabled()) return;
+        const row = {
+          id: s.id,
+          name: s.name,
+          batch: s.batch,
+          email: s.email,
+          phone: s.phone,
+          monthly_fee: s.monthlyFee,
+          paid_amount: s.paidAmount,
+          fee_status: s.feeStatus,
+          due_date: s.dueDate,
+          last_payment_date: s.lastPaymentDate,
+          password: s.password || 'student123',
+          notes: s.notes
+        };
         try {
           await sbFetch('students?on_conflict=id', {
             method: 'POST',
             headers: { 'Prefer': 'resolution=merge-duplicates' },
-            body: JSON.stringify({
-              id: s.id,
-              name: s.name,
-              batch: s.batch,
-              email: s.email,
-              phone: s.phone,
-              monthly_fee: s.monthlyFee,
-              paid_amount: s.paidAmount,
-              fee_status: s.feeStatus,
-              due_date: s.dueDate,
-              last_payment_date: s.lastPaymentDate,
-              notes: s.notes
-            })
+            body: JSON.stringify(row)
           });
         } catch (err) {
+          if (String(err.message).includes('password')) {
+            delete row.password;
+            try {
+              await sbFetch('students?on_conflict=id', {
+                method: 'POST',
+                headers: { 'Prefer': 'resolution=merge-duplicates' },
+                body: JSON.stringify(row)
+              });
+              return;
+            } catch (e2) {}
+          }
           showToast('Cloud save failed: ' + err.message, 'error');
         }
       }
@@ -893,7 +1083,7 @@
             method: 'POST',
             headers: { 'Prefer': 'resolution=merge-duplicates' },
             body: JSON.stringify({
-              id: `${att.sessionId}__${att.studentId}`,
+              id: `${att.sessionId}__${att.studentId}__${att.date || (att.timestamp || '').slice(0, 10) || 'default'}`,
               session_id: att.sessionId,
               student_id: att.studentId,
               status: att.status,
@@ -974,6 +1164,14 @@
         ta.remove();
       }
 
+      function formatDateDay(dtStr) {
+        if (!dtStr) return 'Unknown Date';
+        const d = new Date(dtStr);
+        if (isNaN(d.getTime())) return dtStr.replace('T', ' ');
+        return d.toLocaleDateString('en-IN', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' }) +
+          ' • ' + d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+      }
+
       function formatCurrency(val) {
         return '₹' + Number(val || 0).toLocaleString('en-IN');
       }
@@ -1013,11 +1211,13 @@
           return;
         }
         const now = new Date();
+        const todayDate = now.toISOString().slice(0, 10);
         const ts = now.toISOString().slice(0, 16).replace('T', ' ');
-        const existing = state.attendance.find(a => a.sessionId === sessionId && a.studentId === studentId);
+        const existing = state.attendance.find(a => a.sessionId === sessionId && a.studentId === studentId && (a.date || (a.timestamp || '').slice(0, 10)) === todayDate);
         const rec = {
           sessionId,
           studentId,
+          date: todayDate,
           status: 'Present',
           source: 'Meet Link Click',
           timestamp: ts
@@ -1411,6 +1611,12 @@
       }
 
       function renderAttendance() {
+        const dateInput = document.getElementById('attendance-date-input');
+        if (dateInput && !dateInput.value) {
+          dateInput.value = new Date().toISOString().slice(0, 10);
+        }
+        const selectedDate = dateInput ? dateInput.value : new Date().toISOString().slice(0, 10);
+
         const sel = document.getElementById('attendance-session-select');
         const prevVal = sel.value;
         sel.innerHTML = state.sessions.map(s => `<option value="${s.id}">${escapeHtml(s.title)} (${escapeHtml(s.batch)})</option>`).join('');
@@ -1432,7 +1638,7 @@
         }
 
         tbody.innerHTML = enrolled.map(stu => {
-          const rec = state.attendance.find(a => a.sessionId === ses.id && a.studentId === stu.id);
+          const rec = state.attendance.find(a => a.sessionId === ses.id && a.studentId === stu.id && ((a.date || (a.timestamp || '').slice(0, 10)) === selectedDate || !a.timestamp));
           const status = rec ? rec.status : 'Absent';
           const source = rec ? `${rec.source} (${rec.timestamp})` : 'Not recorded';
           return `
@@ -1449,6 +1655,87 @@
             </tr>
           `;
         }).join('');
+      }
+
+      function getStudentHistoryRows(stu) {
+        const stuRecs = state.attendance.filter(a => a.studentId === stu.id);
+        const map = new Map();
+        stuRecs.forEach(rec => {
+          const ses = state.sessions.find(s => s.id === rec.sessionId);
+          const d = rec.date || (rec.timestamp || '').slice(0, 10) || (ses ? (ses.datetime || '').slice(0, 10) : '');
+          const key = `${rec.sessionId}__${d}`;
+          map.set(key, {
+            dateStr: rec.timestamp || (ses ? ses.datetime : d),
+            sortKey: rec.timestamp || d || '',
+            title: ses ? ses.title : 'Online Class',
+            status: rec.status,
+            meta: `${rec.source}${rec.timestamp ? ' (' + rec.timestamp + ')' : ''}`
+          });
+        });
+        state.sessions.filter(s => s.batch === stu.batch).forEach(ses => {
+          const d = (ses.datetime || '').slice(0, 10);
+          const key = `${ses.id}__${d}`;
+          if (!map.has(key)) {
+            map.set(key, {
+              dateStr: ses.datetime,
+              sortKey: ses.datetime || d || '',
+              title: ses.title,
+              status: 'Absent',
+              meta: 'No check-in recorded'
+            });
+          }
+        });
+        return Array.from(map.values()).sort((a, b) => b.sortKey.localeCompare(a.sortKey));
+      }
+
+      function renderTeacherStudentAttendance() {
+        const sel = document.getElementById('teacher-student-att-select');
+        const filterSel = document.getElementById('teacher-student-att-filter');
+        const pillsEl = document.getElementById('teacher-student-att-pills');
+        const tbody = document.getElementById('teacher-student-att-body');
+        if (!sel || !tbody) return;
+
+        const prev = sel.value;
+        sel.innerHTML = state.students.map(s => `<option value="${s.id}">${escapeHtml(s.name)} (${escapeHtml(s.batch)})</option>`).join('');
+        if (state.students.some(s => s.id === prev)) sel.value = prev;
+
+        const stu = state.students.find(s => s.id === sel.value);
+        if (!stu) {
+          pillsEl.innerHTML = '';
+          tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-slate-500 text-xs">No students registered.</td></tr>`;
+          return;
+        }
+
+        const rows = getStudentHistoryRows(stu);
+        let presentCnt = 0, absentCnt = 0, lateCnt = 0;
+        rows.forEach(r => {
+          if (r.status === 'Present') presentCnt++;
+          else if (r.status === 'Late') lateCnt++;
+          else absentCnt++;
+        });
+
+        pillsEl.innerHTML = `
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Present: ${presentCnt} days</span>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">Absent: ${absentCnt} days</span>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">Late: ${lateCnt} days</span>
+        `;
+
+        const filterVal = filterSel ? filterSel.value : 'all';
+        const filteredRows = rows.filter(r => filterVal === 'all' || r.status === filterVal);
+
+        if (!filteredRows.length) {
+          tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-slate-500 text-xs">No ${filterVal === 'all' ? '' : escapeHtml(filterVal.toLowerCase()) + ' '}days recorded for ${escapeHtml(stu.name)}.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = filteredRows.map(r => `
+          <tr class="hover:bg-slate-50/80">
+            <td class="py-2.5 px-4 text-xs font-medium text-slate-800 whitespace-nowrap">${escapeHtml(formatDateDay(r.dateStr))}</td>
+            <td class="py-2.5 px-4 text-sm font-semibold text-slate-900">${escapeHtml(r.title)}</td>
+            <td class="py-2.5 px-4">${statusBadge(r.status)}</td>
+            <td class="py-2.5 px-4 text-xs text-slate-500">${escapeHtml(r.meta)}</td>
+          </tr>
+        `).join('');
       }
 
       function renderFees() {
@@ -1517,6 +1804,7 @@
         renderStudents();
         renderClasses();
         renderAttendance();
+        renderTeacherStudentAttendance();
         renderFees();
         if (typeof lucide !== 'undefined') lucide.createIcons();
       }
@@ -1539,6 +1827,7 @@
         document.getElementById('student-phone').value = student ? student.phone : '';
         document.getElementById('student-fee-amount').value = student ? student.monthlyFee : '1500';
         document.getElementById('student-fee-due').value = student ? student.dueDate : new Date().toISOString().slice(0, 10);
+        document.getElementById('student-password').value = student ? (student.password || 'student123') : 'student123';
         document.getElementById('student-notes').value = student ? student.notes : '';
         openModal('modal-student');
       }
@@ -1594,18 +1883,74 @@
       document.getElementById('btn-quick-add-student').addEventListener('click', () => openStudentModal());
       document.getElementById('btn-open-student-modal').addEventListener('click', () => openStudentModal());
       document.getElementById('btn-open-payment-modal').addEventListener('click', () => openPaymentModal());
+      document.getElementById('btn-open-reset-fees-modal').addEventListener('click', () => openModal('modal-reset-fees'));
+      document.getElementById('btn-confirm-reset-fees').addEventListener('click', async () => {
+        state.payments = [];
+        state.students.forEach(s => {
+          s.monthlyFee = 0;
+          s.paidAmount = 0;
+          s.feeStatus = 'Paid';
+          s.lastPaymentDate = '';
+        });
+        saveState();
+        closeModal('modal-reset-fees');
+        renderAll();
+        if (isCloudEnabled()) {
+          try {
+            await sbFetch('payments?id=neq.__none__', { method: 'DELETE' });
+            for (const s of state.students) await upsertStudentCloud(s);
+          } catch (err) {
+            showToast('Cloud reset warning: ' + err.message, 'error');
+          }
+        }
+        showToast('All recent transactions and outstanding balances reset to ₹0!');
+      });
 
 
       document.getElementById('form-unlock-pin').addEventListener('submit', e => {
         e.preventDefault();
-        const entered = document.getElementById('input-unlock-pin').value.trim();
-        if (entered === (cloudConfig.teacherPin || '1234')) {
+        const enteredId = document.getElementById('input-teacher-userid').value.trim().toLowerCase();
+        const enteredPass = document.getElementById('input-unlock-pin').value;
+        const expectedId = (cloudConfig.teacherUserId || 'rohitsonar2708@gmail.com').toLowerCase();
+        const expectedPass = cloudConfig.teacherPassword || 'Logmein@2708';
+        if (enteredId === expectedId && enteredPass === expectedPass) {
           document.getElementById('teacher-pin-overlay').classList.add('hidden');
           document.getElementById('pin-error-msg').classList.add('hidden');
-          showToast('Dashboard unlocked!');
+          showToast('Welcome back, Teacher!');
         } else {
           document.getElementById('pin-error-msg').classList.remove('hidden');
         }
+      });
+
+      document.getElementById('btn-forgot-teacher').addEventListener('click', () => {
+        document.getElementById('form-unlock-pin').classList.add('hidden');
+        document.getElementById('form-teacher-reset').classList.remove('hidden');
+        document.getElementById('reset-tch-error').classList.add('hidden');
+      });
+
+      document.getElementById('btn-back-teacher-login').addEventListener('click', () => {
+        document.getElementById('form-teacher-reset').classList.add('hidden');
+        document.getElementById('form-unlock-pin').classList.remove('hidden');
+      });
+
+      document.getElementById('form-teacher-reset').addEventListener('submit', e => {
+        e.preventDefault();
+        const uid = document.getElementById('reset-tch-userid').value.trim().toLowerCase();
+        const code = document.getElementById('reset-tch-code').value.trim();
+        const newPass = document.getElementById('reset-tch-newpass').value;
+        const expectedId = (cloudConfig.teacherUserId || 'rohitsonar2708@gmail.com').toLowerCase();
+        const projectRef = (cloudConfig.supabaseUrl || '').replace('https://', '').split('.')[0];
+        if (uid !== expectedId || (code !== projectRef && code !== '9458')) {
+          document.getElementById('reset-tch-error').classList.remove('hidden');
+          return;
+        }
+        cloudConfig.teacherPassword = newPass;
+        saveCloudConfig(cloudConfig);
+        document.getElementById('reset-tch-error').classList.add('hidden');
+        document.getElementById('form-teacher-reset').reset();
+        document.getElementById('form-teacher-reset').classList.add('hidden');
+        document.getElementById('form-unlock-pin').classList.remove('hidden');
+        showToast('Teacher password reset successfully!');
       });
 
       document.getElementById('btn-open-session-modal').addEventListener('click', () => {
@@ -1641,6 +1986,7 @@
           phone: document.getElementById('student-phone').value.trim(),
           monthlyFee: Number(document.getElementById('student-fee-amount').value || 0),
           dueDate: document.getElementById('student-fee-due').value,
+          password: document.getElementById('student-password').value.trim() || 'student123',
           notes: document.getElementById('student-notes').value.trim()
         };
         let savedStu;
@@ -1726,7 +2072,27 @@
       document.getElementById('student-search').addEventListener('input', renderStudents);
       document.getElementById('student-batch-filter').addEventListener('change', renderStudents);
       document.getElementById('student-fee-filter').addEventListener('change', renderStudents);
+      document.getElementById('attendance-date-input').addEventListener('change', renderAttendance);
       document.getElementById('attendance-session-select').addEventListener('change', renderAttendance);
+      document.getElementById('btn-export-stu-att').addEventListener('click', () => {
+        const sel = document.getElementById('teacher-student-att-select');
+        const stu = state.students.find(s => s.id === (sel ? sel.value : ''));
+        if (!stu) return;
+        const rows = getStudentHistoryRows(stu);
+        const csv = ['Student,Batch,Date,Class,Status,Details'].concat(
+          rows.map(r => `"${stu.name.replace(/"/g, '""')}","${stu.batch.replace(/"/g, '""')}","${formatDateDay(r.dateStr)}","${r.title.replace(/"/g, '""')}","${r.status}","${r.meta.replace(/"/g, '""')}"`)
+        ).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${stu.name.toLowerCase().replace(/\s+/g, '-')}-attendance-history.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast(`Exported attendance history for ${stu.name}!`);
+      });
+      document.getElementById('teacher-student-att-select').addEventListener('change', renderTeacherStudentAttendance);
+      document.getElementById('teacher-student-att-filter').addEventListener('change', renderTeacherStudentAttendance);
 
       document.getElementById('btn-export-data').addEventListener('click', () => {
         const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
@@ -1810,13 +2176,17 @@
         const markAtt = e.target.closest('[data-mark-att]');
         if (markAtt) {
           const [sesId, stuId, status] = markAtt.dataset.markAtt.split('|');
-          const ts = new Date().toISOString().slice(0, 16).replace('T', ' ');
-          const rec = { sessionId: sesId, studentId: stuId, status, source: 'Manual', timestamp: ts };
-          const existing = state.attendance.find(a => a.sessionId === sesId && a.studentId === stuId);
+          const dateInput = document.getElementById('attendance-date-input');
+          const selectedDate = (dateInput && dateInput.value) ? dateInput.value : new Date().toISOString().slice(0, 10);
+          const timePart = new Date().toISOString().slice(11, 16);
+          const ts = `${selectedDate} ${timePart}`;
+          const rec = { sessionId: sesId, studentId: stuId, date: selectedDate, status, source: 'Manual', timestamp: ts };
+          const existing = state.attendance.find(a => a.sessionId === sesId && a.studentId === stuId && (a.date || (a.timestamp || '').slice(0, 10)) === selectedDate);
           if (existing) {
             existing.status = status;
             existing.source = 'Manual';
             existing.timestamp = ts;
+            existing.date = selectedDate;
           } else {
             state.attendance.push(rec);
           }
@@ -1862,12 +2232,27 @@
       window.addEventListener('hashchange', checkHashJoin);
 
       let loggedInStudentId = null;
+      let spAttFilter = 'all';
+
+      document.getElementById('sp-att-filters').addEventListener('click', e => {
+        const btn = e.target.closest('[data-sp-att-filter]');
+        if (!btn) return;
+        spAttFilter = btn.dataset.spAttFilter;
+        document.querySelectorAll('[data-sp-att-filter]').forEach(b => {
+          b.className = b.dataset.spAttFilter === spAttFilter
+            ? 'px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-600 text-white'
+            : 'px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200';
+        });
+        renderStudentPortal();
+      });
 
       function switchLoginRole(role) {
         const stuTab = document.getElementById('login-tab-student');
         const tchTab = document.getElementById('login-tab-teacher');
         const stuForm = document.getElementById('form-student-login');
         const tchForm = document.getElementById('form-unlock-pin');
+        document.getElementById('form-student-reset').classList.add('hidden');
+        document.getElementById('form-teacher-reset').classList.add('hidden');
         if (role === 'student') {
           stuTab.className = 'py-2 rounded-lg text-xs font-semibold bg-white text-indigo-700 shadow-sm transition';
           tchTab.className = 'py-2 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition';
@@ -1933,24 +2318,35 @@
           }).join('');
         }
 
+        const spRows = getStudentHistoryRows(stu);
+        let spPresent = 0, spAbsent = 0, spLate = 0;
+        spRows.forEach(r => {
+          if (r.status === 'Present') spPresent++;
+          else if (r.status === 'Late') spLate++;
+          else spAbsent++;
+        });
+
+        document.getElementById('sp-att-summary-pills').innerHTML = `
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Present: ${spPresent} days</span>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">Absent: ${spAbsent} days</span>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">Late: ${spLate} days</span>
+        `;
+
+        const filteredSp = spRows.filter(r => spAttFilter === 'all' || r.status === spAttFilter);
         const attContainer = document.getElementById('sp-attendance-list');
-        if (!mySessions.length) {
-          attContainer.innerHTML = `<p class="text-xs text-slate-500 py-2">No attendance records yet.</p>`;
+        if (!filteredSp.length) {
+          attContainer.innerHTML = `<p class="text-xs text-slate-500 py-3">No ${spAttFilter === 'all' ? '' : escapeHtml(spAttFilter.toLowerCase()) + ' '}days recorded yet.</p>`;
         } else {
-          attContainer.innerHTML = mySessions.map(ses => {
-            const rec = state.attendance.find(a => a.sessionId === ses.id && a.studentId === stu.id);
-            const status = rec ? rec.status : 'Absent';
-            const meta = rec ? `${rec.source} • ${rec.timestamp}` : 'Not attended yet';
-            return `
-              <div class="py-2.5 flex items-center justify-between gap-3">
-                <div>
-                  <div class="font-medium text-slate-900">${escapeHtml(ses.title)}</div>
-                  <div class="text-xs text-slate-500">${escapeHtml(meta)}</div>
-                </div>
-                <div>${statusBadge(status)}</div>
+          attContainer.innerHTML = filteredSp.map(r => `
+            <div class="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <div class="text-xs font-semibold text-indigo-700">${escapeHtml(formatDateDay(r.dateStr))}</div>
+                <div class="font-semibold text-slate-900 mt-0.5">${escapeHtml(r.title)}</div>
+                <div class="text-xs text-slate-500">${escapeHtml(r.meta)}</div>
               </div>
-            `;
-          }).join('');
+              <div class="shrink-0">${statusBadge(r.status)}</div>
+            </div>
+          `).join('');
         }
 
         if (typeof lucide !== 'undefined') lucide.createIcons();
@@ -1961,6 +2357,7 @@
 
       document.getElementById('btn-lock-portal').addEventListener('click', () => {
         loggedInStudentId = null;
+        document.getElementById('input-teacher-userid').value = '';
         document.getElementById('input-unlock-pin').value = '';
         document.getElementById('pin-error-msg').classList.add('hidden');
         document.getElementById('student-portal-view').classList.add('hidden');
@@ -1973,18 +2370,21 @@
         document.getElementById('student-portal-view').classList.add('hidden');
         document.getElementById('teacher-pin-overlay').classList.remove('hidden');
         document.getElementById('input-student-identifier').value = '';
+        document.getElementById('input-student-password').value = '';
         if (typeof lucide !== 'undefined') lucide.createIcons();
       });
 
       document.getElementById('form-student-login').addEventListener('submit', e => {
         e.preventDefault();
         const raw = document.getElementById('input-student-identifier').value.trim().toLowerCase();
+        const pass = document.getElementById('input-student-password').value;
         const digits = raw.replace(/[^0-9]/g, '');
         const match = state.students.find(s => {
           const emailMatch = (s.email || '').trim().toLowerCase() === raw;
           const stuDigits = (s.phone || '').replace(/[^0-9]/g, '');
           const phoneMatch = digits.length >= 6 && stuDigits.endsWith(digits.slice(-10));
-          return emailMatch || phoneMatch;
+          const passMatch = (s.password || 'student123') === pass;
+          return (emailMatch || phoneMatch) && passMatch;
         });
         if (!match) {
           document.getElementById('student-login-error').classList.remove('hidden');
@@ -1996,6 +2396,42 @@
         document.getElementById('student-portal-view').classList.remove('hidden');
         renderStudentPortal();
         showToast(`Welcome, ${match.name}!`);
+      });
+
+      document.getElementById('btn-forgot-student').addEventListener('click', () => {
+        document.getElementById('form-student-login').classList.add('hidden');
+        document.getElementById('form-student-reset').classList.remove('hidden');
+        document.getElementById('reset-stu-error').classList.add('hidden');
+      });
+
+      document.getElementById('btn-back-student-login').addEventListener('click', () => {
+        document.getElementById('form-student-reset').classList.add('hidden');
+        document.getElementById('form-student-login').classList.remove('hidden');
+      });
+
+      document.getElementById('form-student-reset').addEventListener('submit', async e => {
+        e.preventDefault();
+        const email = document.getElementById('reset-stu-email').value.trim().toLowerCase();
+        const phoneDigits = document.getElementById('reset-stu-phone').value.replace(/[^0-9]/g, '');
+        const newPass = document.getElementById('reset-stu-newpass').value;
+        const match = state.students.find(s => {
+          const emailOk = (s.email || '').trim().toLowerCase() === email;
+          const stuDigits = (s.phone || '').replace(/[^0-9]/g, '');
+          const phoneOk = phoneDigits.length >= 6 && stuDigits.endsWith(phoneDigits.slice(-10));
+          return emailOk && phoneOk;
+        });
+        if (!match) {
+          document.getElementById('reset-stu-error').classList.remove('hidden');
+          return;
+        }
+        match.password = newPass;
+        saveState();
+        await upsertStudentCloud(match);
+        document.getElementById('reset-stu-error').classList.add('hidden');
+        document.getElementById('form-student-reset').reset();
+        document.getElementById('form-student-reset').classList.add('hidden');
+        document.getElementById('form-student-login').classList.remove('hidden');
+        showToast('Student password updated! You can sign in now.');
       });
 
       document.getElementById('sp-sessions-list').addEventListener('click', async e => {
