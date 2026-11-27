@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ClassPulse — Online Class, Attendance &amp; Fee Manager</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClassPulse — Online Class, Attendance & Fee Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
@@ -43,22 +43,77 @@
   <!-- Toast Container -->
   <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
 
-  <!-- Teacher PIN Lock Overlay -->
-  <div id="teacher-pin-overlay" class="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 sm:p-8 border border-slate-200 text-center">
-      <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center mx-auto mb-4">
-        <i data-lucide="lock" class="w-6 h-6"></i>
+  <!-- Portal Login Overlay (Student Login + Teacher Login) -->
+  <div id="teacher-pin-overlay" class="hidden fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 border border-slate-200">
+      <div class="text-center mb-5">
+        <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center mx-auto mb-3">
+          <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+        </div>
+        <h2 class="text-xl font-bold text-slate-900">ClassPulse Portal</h2>
+        <p class="text-xs text-slate-500 mt-1">Sign in as a Student or Teacher</p>
       </div>
-      <h2 class="text-lg font-bold text-slate-900">Teacher Dashboard Locked</h2>
-      <p class="text-xs text-slate-500 mt-1 mb-5">Enter your Teacher PIN to manage students, attendance, and fees.</p>
-      <form id="form-unlock-pin" class="space-y-3">
-        <input id="input-unlock-pin" type="password" inputmode="numeric" required placeholder="Enter PIN" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-center text-lg tracking-widest focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+      <div class="grid grid-cols-2 gap-1.5 p-1 bg-slate-100 rounded-xl mb-5">
+        <button id="login-tab-student" type="button" class="py-2 rounded-lg text-xs font-semibold bg-white text-indigo-700 shadow-sm transition">Student Login</button>
+        <button id="login-tab-teacher" type="button" class="py-2 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition">Teacher Login</button>
+      </div>
+
+      <!-- Student Login Form -->
+      <form id="form-student-login" class="space-y-3">
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">Registered Email or Phone Number</label>
+          <input id="input-student-identifier" type="text" required placeholder="e.g. aarav@example.com or 9876543210" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+        <p id="student-login-error" class="hidden text-xs text-rose-600 font-medium">No student found with that email or phone number.</p>
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition">
+          Open My Student Portal
+        </button>
+      </form>
+
+      <!-- Teacher Login Form -->
+      <form id="form-unlock-pin" class="hidden space-y-3">
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">Teacher Dashboard PIN</label>
+          <input id="input-unlock-pin" type="password" inputmode="numeric" required placeholder="Enter Teacher PIN" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-center text-lg tracking-widest focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
         <p id="pin-error-msg" class="hidden text-xs text-rose-600 font-medium">Incorrect PIN. Please try again.</p>
         <button type="submit" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition">
-          Unlock Dashboard
+          Unlock Teacher Dashboard
         </button>
       </form>
     </div>
+  </div>
+
+  <!-- Student Personal Portal View -->
+  <div id="student-portal-view" class="hidden fixed inset-0 z-40 overflow-y-auto bg-slate-50 flex flex-col">
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0">
+            <i data-lucide="user-check" class="w-5 h-5"></i>
+          </div>
+          <div class="min-w-0">
+            <h2 id="sp-student-name" class="text-sm sm:text-base font-bold text-slate-900 truncate">Student Portal</h2>
+            <p id="sp-student-batch" class="text-xs text-slate-500 truncate"></p>
+          </div>
+        </div>
+        <button id="btn-student-logout" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition">
+          <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Logout
+        </button>
+      </div>
+    </header>
+    <main class="max-w-4xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="sp-summary-cards"></div>
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+        <h3 class="text-sm font-bold text-slate-900 mb-3">My Class &amp; Google Meet Links</h3>
+        <div id="sp-sessions-list" class="space-y-3"></div>
+      </div>
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+        <h3 class="text-sm font-bold text-slate-900 mb-3">My Attendance History</h3>
+        <div id="sp-attendance-list" class="divide-y divide-slate-100 text-sm"></div>
+      </div>
+    </main>
   </div>
 
   <!-- Student Join Portal Overlay (when #join= or simulated) -->
@@ -99,7 +154,9 @@
         <div class="min-w-0">
           <div class="flex items-center gap-2">
             <h1 class="text-base sm:text-lg font-bold text-slate-900 truncate">ClassPulse</h1>
-            <span id="cloud-status-badge" class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Live Cloud</span>
+            <span id="cloud-status-badge" class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+              Local Demo
+            </span>
           </div>
           <p class="text-[11px] text-slate-500 hidden sm:block">Student, Meet Attendance &amp; Fee Manager</p>
         </div>
@@ -125,17 +182,14 @@
       </nav>
 
       <div class="flex items-center gap-2">
-        <button id="btn-open-cloud-modal" type="button" class="hidden items-center gap-1.5 px-3 py-2 rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-xs font-semibold transition whitespace-nowrap">
-          <i data-lucide="cloud" class="w-3.5 h-3.5"></i>
-          <span class="hidden sm:inline">Go Live</span>
-        </button>
         <button id="btn-export-data" type="button" title="Export Backup JSON" class="hidden lg:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-200 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
           <i data-lucide="download" class="w-3.5 h-3.5"></i> Backup
         </button>
         <label title="Import Backup JSON" class="hidden lg:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-200 text-xs font-medium text-slate-700 hover:bg-slate-50 transition cursor-pointer">
           <i data-lucide="upload" class="w-3.5 h-3.5"></i> Restore
-          <input id="input-import-data" type="file" accept=".json" class="hidden">
+          <input id="input-import-data" type="file" accept=".json" class="hidden" />
         </label>
+        <button id="btn-lock-portal" type="button" title="Logout" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-semibold transition whitespace-nowrap"><i data-lucide="log-out" class="w-3.5 h-3.5"></i><span>Logout</span></button>
         <button id="btn-quick-add-student" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-medium transition shadow-sm whitespace-nowrap">
           <i data-lucide="user-plus" class="w-4 h-4"></i>
           <span class="hidden sm:inline">Register Student</span>
@@ -179,7 +233,9 @@
           </div>
           <div>
             <h2 class="text-sm font-semibold text-indigo-950">Automated Google Meet Attendance Ready</h2>
-            <p id="dashboard-banner-text" class="text-xs text-indigo-800 mt-0.5">Connected to <strong>Supabase Live Cloud</strong>. Student Meet-link clicks from any device sync directly to your dashboard.</p>
+            <p id="dashboard-banner-text" class="text-xs text-indigo-800 mt-0.5">
+              Create a class session in <strong>Meet Links</strong> to generate personalized student join URLs. Share each student\'s personal link so attendance is marked automatically on click.
+            </p>
           </div>
         </div>
         <div class="flex items-center gap-2 shrink-0">
@@ -249,7 +305,7 @@
       <div class="bg-white rounded-xl border border-slate-200 p-4 flex flex-col sm:flex-row gap-3">
         <div class="relative flex-1">
           <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
-          <input id="student-search" type="text" placeholder="Search by name, email, phone, or batch..." class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <input id="student-search" type="text" placeholder="Search by name, email, phone, or batch..." class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
         </div>
         <select id="student-batch-filter" class="px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
           <option value="all">All Batches</option>
@@ -372,111 +428,6 @@
 
   </main>
 
-  <!-- MODAL: Cloud Setup / Go Live (Hidden by default) -->
-  <div id="modal-cloud" class="hidden fixed inset-0 z-40 modal-backdrop flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-6 border border-slate-200 max-h-[90vh] overflow-y-auto space-y-5">
-      <div class="flex items-center justify-between">
-        <div>
-          <h3 class="text-lg font-bold text-slate-900">Go Live with Free Supabase Cloud</h3>
-          <p class="text-xs text-slate-500">Connect your free Supabase database so student Meet-link clicks sync from any device.</p>
-        </div>
-        <button type="button" data-close-modal="modal-cloud" class="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <!-- Step 1: SQL Script -->
-      <div class="bg-slate-50 rounded-xl border border-slate-200 p-4 space-y-2">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-bold uppercase tracking-wider text-indigo-700">Step 1: Run this SQL in Supabase SQL Editor</span>
-          <button id="btn-copy-sql" type="button" class="px-2.5 py-1 rounded-md bg-white border border-slate-200 hover:bg-slate-100 text-xs font-medium text-slate-700 inline-flex items-center gap-1">
-            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy SQL
-          </button>
-        </div>
-        <pre id="supabase-sql-block" class="text-[11px] bg-slate-900 text-slate-100 p-3 rounded-lg overflow-x-auto font-mono leading-relaxed">create table if not exists students (
-  id text primary key,
-  name text not null,
-  batch text not null,
-  email text,
-  phone text,
-  monthly_fee numeric default 0,
-  paid_amount numeric default 0,
-  fee_status text default 'Pending',
-  due_date text,
-  last_payment_date text,
-  notes text
-);
-
-create table if not exists sessions (
-  id text primary key,
-  title text not null,
-  batch text not null,
-  datetime text not null,
-  meet_url text not null
-);
-
-create table if not exists attendance (
-  id text primary key,
-  session_id text not null,
-  student_id text not null,
-  status text not null,
-  source text,
-  timestamp text
-);
-
-create table if not exists payments (
-  id text primary key,
-  student_id text not null,
-  amount numeric not null,
-  date text not null,
-  method text,
-  ref text,
-  notes text
-);
-
-alter table students disable row level security;
-alter table sessions disable row level security;
-alter table attendance disable row level security;
-alter table payments disable row level security;</pre>
-      </div>
-
-      <!-- Step 2: Credentials -->
-      <form id="form-cloud-config" class="space-y-3">
-        <div class="text-xs font-bold uppercase tracking-wider text-indigo-700">Step 2: Connect Supabase &amp; Set Teacher PIN</div>
-        <div>
-          <label class="block text-xs font-medium text-slate-700 mb-1">Supabase Project URL *</label>
-          <input id="cloud-supabase-url" type="url" required placeholder="https://your-project-id.supabase.co" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-slate-700 mb-1">Supabase Anon (Public) Key *</label>
-          <input id="cloud-supabase-key" type="text" required placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-slate-700 mb-1">Teacher Dashboard PIN (protects live site)</label>
-          <input id="cloud-teacher-pin" type="text" required value="1234" placeholder="1234" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        </div>
-        <div class="flex flex-wrap items-center gap-2 pt-1">
-          <button type="submit" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold transition">
-            Save &amp; Test Cloud Connection
-          </button>
-          <button id="btn-push-local-to-cloud" type="button" class="px-4 py-2 rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-xs sm:text-sm font-semibold transition">
-            Upload Current Data to Cloud
-          </button>
-        </div>
-      </form>
-
-      <!-- Step 3: Download Live index.html -->
-      <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <div class="text-xs font-bold uppercase tracking-wider text-emerald-800">Step 3: Publish Online for Free</div>
-          <p class="text-xs text-emerald-900 mt-0.5">Download your configured <strong>index.html</strong> file and drag-and-drop it onto <strong>app.netlify.com/drop</strong>.</p>
-        </div>
-        <button id="btn-download-live-html" type="button" class="shrink-0 inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition shadow-sm">
-          <i data-lucide="download" class="w-4 h-4"></i> Download Live index.html
-        </button>
-      </div>
-    </div>
-  </div>
 
   <!-- MODAL: Register / Edit Student -->
   <div id="modal-student" class="hidden fixed inset-0 z-40 modal-backdrop flex items-center justify-center p-4">
@@ -488,40 +439,40 @@ alter table payments disable row level security;</pre>
         </button>
       </div>
       <form id="form-student" class="space-y-4">
-        <input type="hidden" id="student-id">
+        <input type="hidden" id="student-id" />
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-medium text-slate-700 mb-1">Full Name *</label>
-            <input id="student-name" type="text" required placeholder="e.g. Aarav Sharma" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <input id="student-name" type="text" required placeholder="e.g. Aarav Sharma" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
           <div>
             <label class="block text-xs font-medium text-slate-700 mb-1">Batch / Course *</label>
-            <input id="student-batch" type="text" required placeholder="e.g. Class 10 Math" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <input id="student-batch" type="text" required placeholder="e.g. Class 10 Math" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-medium text-slate-700 mb-1">Email Address *</label>
-            <input id="student-email" type="email" required placeholder="student@example.com" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <input id="student-email" type="email" required placeholder="student@example.com" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
           <div>
             <label class="block text-xs font-medium text-slate-700 mb-1">Phone / WhatsApp *</label>
-            <input id="student-phone" type="tel" required placeholder="+91 9876543210" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <input id="student-phone" type="tel" required placeholder="+91 9876543210" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-medium text-slate-700 mb-1">Monthly Fee (₹) *</label>
-            <input id="student-fee-amount" type="number" min="0" required placeholder="1500" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <label class="block text-xs font-medium text-slate-700 mb-1">Monthly Fee (&#8377;) *</label>
+            <input id="student-fee-amount" type="number" min="0" required placeholder="1500" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
           <div>
             <label class="block text-xs font-medium text-slate-700 mb-1">Fee Due Date</label>
-            <input id="student-fee-due" type="date" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <input id="student-fee-due" type="date" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
         </div>
         <div>
           <label class="block text-xs font-medium text-slate-700 mb-1">Parent / Notes</label>
-          <input id="student-notes" type="text" placeholder="Optional parent name or notes" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <input id="student-notes" type="text" placeholder="Optional parent name or notes" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
         </div>
         <div class="flex justify-end gap-2 pt-2">
           <button type="button" data-close-modal="modal-student" class="px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50">Cancel</button>
@@ -543,7 +494,7 @@ alter table payments disable row level security;</pre>
       <form id="form-session" class="space-y-4">
         <div>
           <label class="block text-xs font-medium text-slate-700 mb-1">Class Title *</label>
-          <input id="session-title" type="text" required placeholder="e.g. Quadratic Equations Live Class" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <input id="session-title" type="text" required placeholder="e.g. Quadratic Equations Live Class" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
@@ -552,12 +503,12 @@ alter table payments disable row level security;</pre>
           </div>
           <div>
             <label class="block text-xs font-medium text-slate-700 mb-1">Date &amp; Time *</label>
-            <input id="session-datetime" type="datetime-local" required class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <input id="session-datetime" type="datetime-local" required class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
         </div>
         <div>
           <label class="block text-xs font-medium text-slate-700 mb-1">Google Meet Link *</label>
-          <input id="session-meet-url" type="url" required placeholder="https://meet.google.com/abc-defg-hij" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <input id="session-meet-url" type="url" required placeholder="https://meet.google.com/abc-defg-hij" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
         </div>
         <div class="flex justify-end gap-2 pt-2">
           <button type="button" data-close-modal="modal-session" class="px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50">Cancel</button>
@@ -583,12 +534,12 @@ alter table payments disable row level security;</pre>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-medium text-slate-700 mb-1">Amount Paid (₹) *</label>
-            <input id="payment-amount" type="number" min="1" required class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <label class="block text-xs font-medium text-slate-700 mb-1">Amount Paid (&#8377;) *</label>
+            <input id="payment-amount" type="number" min="1" required class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
           <div>
             <label class="block text-xs font-medium text-slate-700 mb-1">Payment Date *</label>
-            <input id="payment-date" type="date" required class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <input id="payment-date" type="date" required class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -603,7 +554,7 @@ alter table payments disable row level security;</pre>
           </div>
           <div>
             <label class="block text-xs font-medium text-slate-700 mb-1">Transaction / Receipt ID</label>
-            <input id="payment-ref" type="text" placeholder="e.g. UPI-4328910" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <input id="payment-ref" type="text" placeholder="e.g. UPI-4328910" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
         </div>
         <div>
@@ -617,7 +568,7 @@ alter table payments disable row level security;</pre>
         </div>
         <div>
           <label class="block text-xs font-medium text-slate-700 mb-1">Remarks</label>
-          <input id="payment-notes" type="text" placeholder="e.g. November tuition fee" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <input id="payment-notes" type="text" placeholder="e.g. November tuition fee" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
         </div>
         <div class="flex justify-end gap-2 pt-2">
           <button type="button" data-close-modal="modal-payment" class="px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50">Cancel</button>
@@ -644,9 +595,9 @@ alter table payments disable row level security;</pre>
     (function () {
       // /*CLOUD_CONFIG_START*/
       const EMBEDDED_CLOUD_CONFIG = {
-        "supabaseUrl": "https://kubexiybreiyysbtnrhr.supabase.co",
-        "supabaseAnonKey": "sb_publishable_Q2LtcqIpuZtw-RiCZCwZXA_1s3eoaJa",
-        "teacherPin": "9458"
+        supabaseUrl: 'https://kubexiybreiyysbtnrhr.supabase.co',
+        supabaseAnonKey: 'sb_publishable_Q2LtcqIpuZtw-RiCZCwZXA_1s3eoaJa',
+        teacherPin: '9458'
       };
       // /*CLOUD_CONFIG_END*/
 
@@ -901,7 +852,6 @@ alter table payments disable row level security;</pre>
         try {
           await sbFetch(`students?id=eq.${encodeURIComponent(id)}`, { method: 'DELETE' });
           await sbFetch(`attendance?student_id=eq.${encodeURIComponent(id)}`, { method: 'DELETE' });
-          await sbFetch(`payments?student_id=eq.${encodeURIComponent(id)}`, { method: 'DELETE' });
         } catch (err) {
           showToast('Cloud delete failed: ' + err.message, 'error');
         }
@@ -1119,7 +1069,7 @@ alter table payments disable row level security;</pre>
         } else {
           badge.textContent = 'Local Demo';
           badge.className = 'hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200';
-          bannerText.innerHTML = 'Create a class session in <strong>Meet Links</strong> to generate personalized student join URLs.';
+          bannerText.innerHTML = 'Create a class session in <strong>Meet Links</strong> to generate personalized student join URLs. Share each student\'s personal link so attendance is marked automatically on click.';
         }
       }
 
@@ -1522,32 +1472,26 @@ alter table payments disable row level security;</pre>
         `;
 
         const tbody = document.getElementById('fees-table-body');
-        if (!state.students.length) {
-          tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-slate-500 text-sm">No students registered yet.</td></tr>`;
-        } else {
-          tbody.innerHTML = state.students.map(s => {
-            const monthly = Number(s.monthlyFee || 0);
-            const paid = Number(s.paidAmount || 0);
-            const bal = Math.max(0, monthly - paid);
-            return `
-              <tr class="hover:bg-slate-50/80">
-                <td class="py-3 px-4">
-                  <div class="font-semibold text-slate-900">${escapeHtml(s.name)}</div>
-                  <div class="text-xs text-slate-500">${escapeHtml(s.batch)}</div>
-                </td>
-                <td class="py-3 px-4">${formatCurrency(monthly)}</td>
-                <td class="py-3 px-4 font-medium text-emerald-700">${formatCurrency(paid)}</td>
-                <td class="py-3 px-4 font-medium ${bal > 0 ? 'text-rose-600' : 'text-slate-500'}">${formatCurrency(bal)}</td>
-                <td class="py-3 px-4">${statusBadge(s.feeStatus)}</td>
-                <td class="py-3 px-4 text-xs text-slate-500">${escapeHtml(s.lastPaymentDate || '—')}</td>
-                <td class="py-3 px-4 text-right whitespace-nowrap space-x-1">
-                  <button data-pay-student="${s.id}" class="px-2.5 py-1 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 text-xs font-medium">Update Fee</button>
-                  <button data-receipt-student="${s.id}" class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-medium">Receipt</button>
-                </td>
-              </tr>
-            `;
-          }).join('');
-        }
+        tbody.innerHTML = state.students.map(s => {
+          const bal = Math.max(0, Number(s.monthlyFee) - Number(s.paidAmount));
+          return `
+            <tr class="hover:bg-slate-50/80">
+              <td class="py-3 px-4">
+                <div class="font-semibold text-slate-900">${escapeHtml(s.name)}</div>
+                <div class="text-xs text-slate-500">${escapeHtml(s.batch)}</div>
+              </td>
+              <td class="py-3 px-4">${formatCurrency(s.monthlyFee)}</td>
+              <td class="py-3 px-4 font-medium text-emerald-700">${formatCurrency(s.paidAmount)}</td>
+              <td class="py-3 px-4 font-medium ${bal > 0 ? 'text-rose-600' : 'text-slate-500'}">${formatCurrency(bal)}</td>
+              <td class="py-3 px-4">${statusBadge(s.feeStatus)}</td>
+              <td class="py-3 px-4 text-xs text-slate-500">${escapeHtml(s.lastPaymentDate || '—')}</td>
+              <td class="py-3 px-4 text-right whitespace-nowrap space-x-1">
+                <button data-pay-student="${s.id}" class="px-2.5 py-1 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 text-xs font-medium">Update Fee</button>
+                <button data-receipt-student="${s.id}" class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-medium">Receipt</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
 
         const histEl = document.getElementById('payment-history-list');
         if (!state.payments.length) {
@@ -1561,7 +1505,6 @@ alter table payments disable row level security;</pre>
                   <div class="font-medium text-slate-900">${escapeHtml(stu ? stu.name : 'Unknown Student')} &bull; <span class="text-emerald-600 font-semibold">${formatCurrency(p.amount)}</span></div>
                   <div class="text-xs text-slate-500">${escapeHtml(p.date)} &bull; ${escapeHtml(p.method)} ${p.ref ? '• Ref: ' + escapeHtml(p.ref) : ''} ${p.notes ? '• ' + escapeHtml(p.notes) : ''}</div>
                 </div>
-                <button data-delete-payment="${p.id}" class="px-2 py-1 rounded text-xs text-rose-600 hover:bg-rose-50">Undo</button>
               </div>
             `;
           }).join('');
@@ -1600,35 +1543,24 @@ alter table payments disable row level security;</pre>
         openModal('modal-student');
       }
 
-      function syncPaymentModalFields(studentId) {
-        const stu = state.students.find(s => s.id === studentId);
-        if (!stu) return;
-        const bal = Math.max(0, Number(stu.monthlyFee || 0) - Number(stu.paidAmount || 0));
-        document.getElementById('payment-amount').value = bal > 0 ? bal : Number(stu.monthlyFee || 0);
-        document.getElementById('payment-status').value = 'Paid';
-      }
-
       function openPaymentModal(preselectStudentId = null) {
-        if (!state.students.length) {
-          showToast('Please register a student first.', 'error');
-          return;
-        }
         const sel = document.getElementById('payment-student-id');
         sel.innerHTML = state.students.map(s => `<option value="${s.id}">${escapeHtml(s.name)} (${escapeHtml(s.batch)})</option>`).join('');
-        if (preselectStudentId && state.students.some(s => s.id === preselectStudentId)) {
-          sel.value = preselectStudentId;
-        }
-        syncPaymentModalFields(sel.value);
+        if (preselectStudentId) sel.value = preselectStudentId;
+        const stu = state.students.find(s => s.id === sel.value);
+        const bal = stu ? Math.max(0, Number(stu.monthlyFee) - Number(stu.paidAmount)) : 0;
+        document.getElementById('payment-amount').value = bal > 0 ? bal : (stu ? stu.monthlyFee : 0);
         document.getElementById('payment-date').value = new Date().toISOString().slice(0, 10);
         document.getElementById('payment-ref').value = '';
         document.getElementById('payment-notes').value = '';
+        document.getElementById('payment-status').value = 'Paid';
         openModal('modal-payment');
       }
 
       function openReceiptModal(studentId) {
         const stu = state.students.find(s => s.id === studentId);
         if (!stu) return;
-        const bal = Math.max(0, Number(stu.monthlyFee || 0) - Number(stu.paidAmount || 0));
+        const bal = Math.max(0, Number(stu.monthlyFee) - Number(stu.paidAmount));
         const stuPayments = state.payments.filter(p => p.studentId === stu.id);
         const lastPay = stuPayments[stuPayments.length - 1];
         document.getElementById('receipt-content').innerHTML = `
@@ -1663,75 +1595,6 @@ alter table payments disable row level security;</pre>
       document.getElementById('btn-open-student-modal').addEventListener('click', () => openStudentModal());
       document.getElementById('btn-open-payment-modal').addEventListener('click', () => openPaymentModal());
 
-      document.getElementById('payment-student-id').addEventListener('change', e => {
-        syncPaymentModalFields(e.target.value);
-      });
-
-      document.getElementById('btn-open-cloud-modal').addEventListener('click', () => {
-        document.getElementById('cloud-supabase-url').value = cloudConfig.supabaseUrl || '';
-        document.getElementById('cloud-supabase-key').value = cloudConfig.supabaseAnonKey || '';
-        document.getElementById('cloud-teacher-pin').value = cloudConfig.teacherPin || '1234';
-        openModal('modal-cloud');
-      });
-
-      document.getElementById('btn-copy-sql').addEventListener('click', () => {
-        copyText(document.getElementById('supabase-sql-block').textContent, 'SQL script copied!');
-      });
-
-      document.getElementById('form-cloud-config').addEventListener('submit', async e => {
-        e.preventDefault();
-        const url = document.getElementById('cloud-supabase-url').value.trim();
-        const key = document.getElementById('cloud-supabase-key').value.trim();
-        const pin = document.getElementById('cloud-teacher-pin').value.trim() || '1234';
-        saveCloudConfig({ supabaseUrl: url, supabaseAnonKey: key, teacherPin: pin });
-        try {
-          await sbFetch('students?select=id&limit=1');
-          showToast('Connected to Supabase Cloud!');
-          await syncFromCloud();
-        } catch (err) {
-          showToast('Connection failed: ' + err.message, 'error');
-        }
-        renderAll();
-      });
-
-      document.getElementById('btn-push-local-to-cloud').addEventListener('click', async () => {
-        if (!isCloudEnabled()) {
-          showToast('Please save your Supabase URL and Key first.', 'error');
-          return;
-        }
-        try {
-          for (const s of state.students) await upsertStudentCloud(s);
-          for (const ses of state.sessions) await upsertSessionCloud(ses);
-          for (const att of state.attendance) await upsertAttendanceCloud(att);
-          for (const p of state.payments) await insertPaymentCloud(p);
-          showToast('All local data uploaded to Supabase Cloud!');
-        } catch (err) {
-          showToast('Upload error: ' + err.message, 'error');
-        }
-      });
-
-      document.getElementById('btn-download-live-html').addEventListener('click', () => {
-        const url = document.getElementById('cloud-supabase-url').value.trim();
-        const key = document.getElementById('cloud-supabase-key').value.trim();
-        const pin = document.getElementById('cloud-teacher-pin').value.trim() || '1234';
-        if (!url || !key) {
-          showToast('Enter your Supabase URL and Anon Key first.', 'error');
-          return;
-        }
-        saveCloudConfig({ supabaseUrl: url, supabaseAnonKey: key, teacherPin: pin });
-        const rawHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-        const cfgRegex = /\/\/ \/\*CLOUD_CONFIG_START\*\/[\s\S]*?\/\/ \/\*CLOUD_CONFIG_END\*\//;
-        const replacement = `// /*CLOUD_CONFIG_START*/\n      const EMBEDDED_CLOUD_CONFIG = ${JSON.stringify({ supabaseUrl: url, supabaseAnonKey: key, teacherPin: pin }, null, 8).replace(/\n}$/, '\n      }')};\n      // /*CLOUD_CONFIG_END*/`;
-        const liveHtml = rawHtml.replace(cfgRegex, replacement);
-        const blob = new Blob([liveHtml], { type: 'text/html' });
-        const dlUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = dlUrl;
-        a.download = 'index.html';
-        a.click();
-        URL.revokeObjectURL(dlUrl);
-        showToast('Downloaded live index.html! Drag it onto Netlify Drop.');
-      });
 
       document.getElementById('form-unlock-pin').addEventListener('submit', e => {
         e.preventDefault();
@@ -1831,18 +1694,13 @@ alter table payments disable row level security;</pre>
         const date = document.getElementById('payment-date').value;
         const method = document.getElementById('payment-method').value;
         const ref = document.getElementById('payment-ref').value.trim();
-        let status = document.getElementById('payment-status').value;
+        const status = document.getElementById('payment-status').value;
         const notes = document.getElementById('payment-notes').value.trim();
 
         const stu = state.students.find(s => s.id === stuId);
-        if (!stu || amount <= 0) return;
+        if (!stu) return;
 
         stu.paidAmount = Number(stu.paidAmount || 0) + amount;
-        if (stu.paidAmount >= Number(stu.monthlyFee || 0)) {
-          status = 'Paid';
-        } else if (stu.paidAmount > 0 && status === 'Paid') {
-          status = 'Partial';
-        }
         stu.feeStatus = status;
         stu.lastPaymentDate = date;
 
@@ -1981,7 +1839,6 @@ alter table payments disable row level security;</pre>
           const id = delStu.dataset.deleteStudent;
           state.students = state.students.filter(s => s.id !== id);
           state.attendance = state.attendance.filter(a => a.studentId !== id);
-          state.payments = state.payments.filter(p => p.studentId !== id);
           saveState();
           renderAll();
           showToast('Student deleted.', 'info');
@@ -2000,35 +1857,158 @@ alter table payments disable row level security;</pre>
           openReceiptModal(recStu.dataset.receiptStudent);
           return;
         }
-
-        const delPay = e.target.closest('[data-delete-payment]');
-        if (delPay) {
-          const payId = delPay.dataset.deletePayment;
-          const payObj = state.payments.find(p => p.id === payId);
-          if (payObj) {
-            const stu = state.students.find(s => s.id === payObj.studentId);
-            if (stu) {
-              stu.paidAmount = Math.max(0, Number(stu.paidAmount || 0) - Number(payObj.amount || 0));
-              stu.feeStatus = stu.paidAmount >= Number(stu.monthlyFee || 0)
-                ? 'Paid'
-                : stu.paidAmount > 0 ? 'Partial' : 'Pending';
-              await upsertStudentCloud(stu);
-            }
-            state.payments = state.payments.filter(p => p.id !== payId);
-            saveState();
-            renderAll();
-            showToast('Payment entry reverted.', 'info');
-            if (isCloudEnabled()) {
-              try {
-                await sbFetch(`payments?id=eq.${encodeURIComponent(payId)}`, { method: 'DELETE' });
-              } catch (err) {}
-            }
-          }
-          return;
-        }
       });
 
       window.addEventListener('hashchange', checkHashJoin);
+
+      let loggedInStudentId = null;
+
+      function switchLoginRole(role) {
+        const stuTab = document.getElementById('login-tab-student');
+        const tchTab = document.getElementById('login-tab-teacher');
+        const stuForm = document.getElementById('form-student-login');
+        const tchForm = document.getElementById('form-unlock-pin');
+        if (role === 'student') {
+          stuTab.className = 'py-2 rounded-lg text-xs font-semibold bg-white text-indigo-700 shadow-sm transition';
+          tchTab.className = 'py-2 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition';
+          stuForm.classList.remove('hidden');
+          tchForm.classList.add('hidden');
+        } else {
+          tchTab.className = 'py-2 rounded-lg text-xs font-semibold bg-white text-indigo-700 shadow-sm transition';
+          stuTab.className = 'py-2 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition';
+          tchForm.classList.remove('hidden');
+          stuForm.classList.add('hidden');
+        }
+      }
+
+      function renderStudentPortal() {
+        const stu = state.students.find(s => s.id === loggedInStudentId);
+        if (!stu) return;
+        document.getElementById('sp-student-name').textContent = stu.name;
+        document.getElementById('sp-student-batch').textContent = `${stu.batch} • ${stu.email || stu.phone}`;
+
+        const att = getStudentAttendanceRate(stu.id);
+        const due = Math.max(0, Number(stu.monthlyFee || 0) - Number(stu.paidAmount || 0));
+
+        document.getElementById('sp-summary-cards').innerHTML = `
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="text-xs font-medium text-slate-500">Student Name</div>
+            <div class="text-base font-bold text-slate-900 mt-1">${escapeHtml(stu.name)}</div>
+            <div class="text-xs text-slate-500 mt-0.5">${escapeHtml(stu.batch)}</div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="text-xs font-medium text-slate-500">My Attendance</div>
+            <div class="text-xl font-bold text-emerald-600 mt-1">${att.pct}%</div>
+            <div class="text-xs text-slate-500 mt-0.5">${att.present} of ${att.total} classes attended</div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+            <div class="text-xs font-medium text-slate-500">Due Fees</div>
+            <div class="text-xl font-bold ${due > 0 ? 'text-rose-600' : 'text-emerald-600'} mt-1">${formatCurrency(due)}</div>
+            <div class="text-xs text-slate-500 mt-0.5">Status: ${escapeHtml(stu.feeStatus)}${stu.dueDate ? ' • Due ' + escapeHtml(stu.dueDate) : ''}</div>
+          </div>
+        `;
+
+        const mySessions = state.sessions.filter(s => s.batch === stu.batch);
+        const sesContainer = document.getElementById('sp-sessions-list');
+        if (!mySessions.length) {
+          sesContainer.innerHTML = `<p class="text-xs text-slate-500">No upcoming class sessions for ${escapeHtml(stu.batch)} yet.</p>`;
+        } else {
+          sesContainer.innerHTML = mySessions.map(ses => {
+            const rec = state.attendance.find(a => a.sessionId === ses.id && a.studentId === stu.id);
+            const isPresent = rec && rec.status === 'Present';
+            return `
+              <div class="p-3.5 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-semibold text-sm text-slate-900">${escapeHtml(ses.title)}</span>
+                    ${isPresent ? statusBadge('Present') : ''}
+                  </div>
+                  <div class="text-xs text-slate-500 mt-0.5">Scheduled: ${escapeHtml(ses.datetime.replace('T', ' '))}</div>
+                </div>
+                <button data-sp-join="${ses.id}" type="button" class="shrink-0 inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition">
+                  <i data-lucide="video" class="w-4 h-4"></i> Join Google Meet
+                </button>
+              </div>
+            `;
+          }).join('');
+        }
+
+        const attContainer = document.getElementById('sp-attendance-list');
+        if (!mySessions.length) {
+          attContainer.innerHTML = `<p class="text-xs text-slate-500 py-2">No attendance records yet.</p>`;
+        } else {
+          attContainer.innerHTML = mySessions.map(ses => {
+            const rec = state.attendance.find(a => a.sessionId === ses.id && a.studentId === stu.id);
+            const status = rec ? rec.status : 'Absent';
+            const meta = rec ? `${rec.source} • ${rec.timestamp}` : 'Not attended yet';
+            return `
+              <div class="py-2.5 flex items-center justify-between gap-3">
+                <div>
+                  <div class="font-medium text-slate-900">${escapeHtml(ses.title)}</div>
+                  <div class="text-xs text-slate-500">${escapeHtml(meta)}</div>
+                </div>
+                <div>${statusBadge(status)}</div>
+              </div>
+            `;
+          }).join('');
+        }
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      }
+
+      document.getElementById('login-tab-student').addEventListener('click', () => switchLoginRole('student'));
+      document.getElementById('login-tab-teacher').addEventListener('click', () => switchLoginRole('teacher'));
+
+      document.getElementById('btn-lock-portal').addEventListener('click', () => {
+        loggedInStudentId = null;
+        document.getElementById('input-unlock-pin').value = '';
+        document.getElementById('pin-error-msg').classList.add('hidden');
+        document.getElementById('student-portal-view').classList.add('hidden');
+        document.getElementById('teacher-pin-overlay').classList.remove('hidden');
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      });
+
+      document.getElementById('btn-student-logout').addEventListener('click', () => {
+        loggedInStudentId = null;
+        document.getElementById('student-portal-view').classList.add('hidden');
+        document.getElementById('teacher-pin-overlay').classList.remove('hidden');
+        document.getElementById('input-student-identifier').value = '';
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      });
+
+      document.getElementById('form-student-login').addEventListener('submit', e => {
+        e.preventDefault();
+        const raw = document.getElementById('input-student-identifier').value.trim().toLowerCase();
+        const digits = raw.replace(/[^0-9]/g, '');
+        const match = state.students.find(s => {
+          const emailMatch = (s.email || '').trim().toLowerCase() === raw;
+          const stuDigits = (s.phone || '').replace(/[^0-9]/g, '');
+          const phoneMatch = digits.length >= 6 && stuDigits.endsWith(digits.slice(-10));
+          return emailMatch || phoneMatch;
+        });
+        if (!match) {
+          document.getElementById('student-login-error').classList.remove('hidden');
+          return;
+        }
+        document.getElementById('student-login-error').classList.add('hidden');
+        loggedInStudentId = match.id;
+        document.getElementById('teacher-pin-overlay').classList.add('hidden');
+        document.getElementById('student-portal-view').classList.remove('hidden');
+        renderStudentPortal();
+        showToast(`Welcome, ${match.name}!`);
+      });
+
+      document.getElementById('sp-sessions-list').addEventListener('click', async e => {
+        const joinBtn = e.target.closest('[data-sp-join]');
+        if (!joinBtn || !loggedInStudentId) return;
+        const sesId = joinBtn.dataset.spJoin;
+        const ses = state.sessions.find(s => s.id === sesId);
+        await markAttendanceByJoin(sesId, loggedInStudentId, false);
+        renderStudentPortal();
+        if (ses && ses.meetUrl) {
+          window.open(ses.meetUrl, '_blank', 'noopener,noreferrer');
+        }
+      });
 
       async function init() {
         renderAll();
@@ -2038,9 +2018,8 @@ alter table payments disable row level security;</pre>
         }
         if (isJoinLink) {
           await checkHashJoin();
-        } else {
-          document.getElementById('teacher-pin-overlay').classList.add('hidden');
-          document.getElementById('modal-cloud').classList.add('hidden');
+        } else if (EMBEDDED_CLOUD_CONFIG.supabaseUrl && EMBEDDED_CLOUD_CONFIG.supabaseAnonKey) {
+          document.getElementById('teacher-pin-overlay').classList.remove('hidden');
           if (typeof lucide !== 'undefined') lucide.createIcons();
         }
       }
